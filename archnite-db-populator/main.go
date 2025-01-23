@@ -1,10 +1,12 @@
 package main
 
 import (
+	"archnite-db-populator/internal/arch"
 	"context"
 	"fmt"
 	"os"
 
+	"github.com/jackc/pgx/v5"
 	"github.com/jackc/pgx/v5/pgxpool"
 )
 
@@ -37,12 +39,26 @@ func main() {
 	}
 	defer dbpool.Close()
 
-	var greeting string
-	err = dbpool.QueryRow(context.Background(), "select 'Hello, world!'").Scan(&greeting)
+	packages, err := arch.LoadPackages()
 	if err != nil {
-		fmt.Fprintf(os.Stderr, "QueryRow failed: %v\n", err)
-		os.Exit(1)
+		fmt.Printf("error loading packages: %v\n", err)
+		return
 	}
 
-	fmt.Println(greeting)
+	copyCount, err := dbpool.CopyFrom(
+		context.Background(),
+		pgx.Identifier{"arch_packages"},
+		[]string{"architecture", "name", "description", "last_update", "url"},
+		pgx.CopyFromSlice(len(packages), func(i int) ([]any, error) {
+			return []any{
+				packages[i].Architecture,
+				packages[i].Name,
+				packages[i].Description,
+				packages[i].LastUpdate,
+				packages[i].Url,
+			}, nil
+		}),
+	)
+
+	fmt.Printf("Copied %d rows to db\n", copyCount)
 }
