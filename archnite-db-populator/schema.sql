@@ -1,18 +1,11 @@
-create table arch_packages
-(
-    id SERIAL primary key,
+CREATE TABLE IF NOT EXISTS arch_packages (
+    id SERIAL PRIMARY KEY,
     architecture VARCHAR(10),
-    name VARCHAR(100),
+    package_name VARCHAR(100),
     description TEXT,
     last_update timestamptz,
     url TEXT
 );
 
-CREATE EXTENSION pg_trgm;
-
-CREATE INDEX archpkg_idx_trgm ON arch_packages USING gin((name) gin_trgm_ops);
-
-SELECT name, description
-FROM arch_packages
-WHERE name LIKE '%go%'
-ORDER BY similarity(name, 'go') DESC;
+CREATE EXTENSION IF NOT EXISTS pg_trgm;
+CREATE INDEX IF NOT EXISTS archpkg_idx_trgm ON arch_packages USING gin((package_name) gin_trgm_ops);

@@ -76,13 +76,9 @@ func LoadPackages() ([]ArchPackage, error) {
 	if firstErr != nil {
 		return nil, firstErr
 	}
-
 	end := time.Now()
 	duration := end.Sub(startTime)
 
-	for i := 0; i < len(packages); i++ {
-		fmt.Printf("%s\n", packages[i].Name)
-	}
 	fmt.Println("Time taken:", duration)
 	return packages, nil
 }
