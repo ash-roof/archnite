@@ -1,12 +1,17 @@
 package arch
 
 import (
+	"context"
 	"encoding/json"
 	"errors"
 	"fmt"
 	"net/http"
+	"os"
 	"sync"
 	"time"
+
+	"github.com/jackc/pgx/v5"
+	"github.com/jackc/pgx/v5/pgxpool"
 )
 
 type ArchPackage struct {
@@ -31,7 +36,36 @@ var (
 	cacheDuration   = time.Hour * 24
 )
 
-func LoadPackages() ([]ArchPackage, error) {
+func Populate() error {
+	initDbSql, err := loadSchema("schema.sql")
+	if err != nil {
+		return fmt.Errorf("failed to load schema: %w", err)
+	}
+	fmt.Println(initDbSql)
+
+	dbpool, err := initDbPool("postgres://postgres:secretpass@localhost:5432/archnitedb")
+	if err != nil {
+		return fmt.Errorf("failed to initialize database connection: %w", err)
+	}
+	defer dbpool.Close()
+
+	if err := executeSchema(dbpool, initDbSql); err != nil {
+		return fmt.Errorf("failed to initialize database schema: %w", err)
+	}
+
+	packages, err := loadPackages()
+	if err != nil {
+		return fmt.Errorf("failed to load packages: %w", err)
+	}
+
+	if err := updateDatabase(dbpool, packages); err != nil {
+		return fmt.Errorf("failed to update database: %w", err)
+	}
+
+	return nil
+}
+
+func loadPackages() ([]ArchPackage, error) {
 	var packages []ArchPackage
 	var wg sync.WaitGroup
 	var mu sync.Mutex
@@ -83,6 +117,91 @@ func LoadPackages() ([]ArchPackage, error) {
 	return packages, nil
 }
 
+func updateDatabase(dbpool *pgxpool.Pool, packages []ArchPackage) error {
+	tx, err := dbpool.Begin(context.Background())
+	if err != nil {
+		return fmt.Errorf("could not begin transaction: %w", err)
+	}
+	defer func() {
+		handleTransactionError(err, tx)
+	}()
+
+	deleteTag, err := tx.Exec(context.Background(), "DELETE FROM arch_packages")
+	if err != nil {
+		return fmt.Errorf("error deleting old packages: %w", err)
+	}
+	fmt.Println(deleteTag)
+
+	copyCount, err := copyPackagesToDb(tx, packages)
+	if err != nil {
+		return fmt.Errorf("error copying packages to db: %w", err)
+	}
+	fmt.Printf("Copied %d rows to db\n", copyCount)
+
+	return nil
+}
+
+func copyPackagesToDb(tx pgx.Tx, packages []ArchPackage) (int64, error) {
+	copyCount, err := tx.CopyFrom(
+		context.Background(),
+		pgx.Identifier{"arch_packages"},
+		[]string{"architecture", "package_name", "description", "last_update", "url"},
+		pgx.CopyFromSlice(len(packages), func(i int) ([]any, error) {
+			return []any{
+				packages[i].Architecture,
+				packages[i].Name,
+				packages[i].Description,
+				packages[i].LastUpdate,
+				packages[i].Url,
+			}, nil
+		}),
+	)
+	if err != nil {
+		return 0, fmt.Errorf("error during CopyFrom: %w", err)
+	}
+	return copyCount, nil
+}
+
+func loadSchema(path string) (string, error) {
+	file, err := os.ReadFile(path)
+	if err != nil {
+		return "", fmt.Errorf("error loading schema.sql: %w\n", err)
+	}
+	return string(file), nil
+}
+
+func initDbPool(dbConnUrl string) (*pgxpool.Pool, error) {
+	dbpool, err := pgxpool.New(context.Background(), dbConnUrl)
+	if err != nil {
+		return nil, fmt.Errorf("unable to create connection pool: %w\n", err)
+	}
+	return dbpool, nil
+}
+
+func executeSchema(dbpool *pgxpool.Pool, schema string) error {
+	_, err := dbpool.Exec(context.Background(), schema)
+	if err != nil {
+		return fmt.Errorf("error executing schema: %w", err)
+	}
+	return nil
+}
+
+func handleTransactionError(err error, tx pgx.Tx) {
+	if err != nil {
+		if rbErr := tx.Rollback(context.Background()); rbErr != nil {
+			fmt.Printf("error rolling back transaction: %v\n", rbErr)
+		} else {
+			fmt.Println("transaction rolled back succesfully")
+		}
+	} else {
+		if commitErr := tx.Commit(context.Background()); commitErr != nil {
+			fmt.Printf("error committing transaction: %v\n", commitErr)
+		} else {
+			fmt.Println("transaction committed succesfully")
+		}
+	}
+}
+
 func loadPageResponse(page int) (ArchResponse, error) {
 	if page <= 0 {
 		return ArchResponse{},
@@ -92,7 +211,6 @@ func loadPageResponse(page int) (ArchResponse, error) {
 	if time.Since(cacheTimeStamp) > cacheDuration {
 		totalPagesOnce = sync.Once{}
 	}
-
 	totalPagesOnce.Do(func() {
 		initialResponse, err := fetchPage(1)
 		if err != nil {
