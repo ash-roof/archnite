@@ -41,7 +41,6 @@ func Populate() error {
 	if err != nil {
 		return fmt.Errorf("failed to load schema: %w", err)
 	}
-	fmt.Println(initDbSql)
 
 	dbpool, err := initDbPool("postgres://postgres:secretpass@localhost:5432/archnitedb")
 	if err != nil {
@@ -183,6 +182,7 @@ func executeSchema(dbpool *pgxpool.Pool, schema string) error {
 	if err != nil {
 		return fmt.Errorf("error executing schema: %w", err)
 	}
+	fmt.Println("db schema initialized")
 	return nil
 }
 
