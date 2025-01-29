@@ -11,7 +11,7 @@ public interface ArchPackageRepository extends CrudRepository<ArchPackage, Integ
     @Query(value = """
         SELECT *
         FROM arch_packages
-        WHERE package_name LIKE CONCAT('%', :keyword, '%')
+        WHERE package_name ILIKE CONCAT('%', :keyword, '%')
         ORDER BY similarity(package_name, :keyword) DESC
         LIMIT :numResults
     """, nativeQuery = true)

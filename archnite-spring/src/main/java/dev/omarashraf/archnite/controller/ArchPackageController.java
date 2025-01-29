@@ -23,7 +23,7 @@ public class ArchPackageController {
 
     @GetMapping("/search")
     public Iterable<ArchPackage> searchArchPackagesBySimilarity(@RequestParam String keyword,
-                                                                @RequestParam(defaultValue = "10") int numResults) {
-        return archPackageService.searchArchPackagesBySimilarity(keyword, numResults);
+                                                                @RequestParam(defaultValue = "10") int results) {
+        return archPackageService.searchArchPackagesBySimilarity(keyword, results);
     }
 }
