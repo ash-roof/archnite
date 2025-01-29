@@ -24,6 +24,7 @@ public class ArchPackageController {
     @GetMapping("/search")
     public Iterable<ArchPackage> searchArchPackagesBySimilarity(@RequestParam String keyword,
                                                                 @RequestParam(defaultValue = "10") int results) {
+        keyword = keyword.replace(" ", "-");
         return archPackageService.searchArchPackagesBySimilarity(keyword, results);
     }
 }
