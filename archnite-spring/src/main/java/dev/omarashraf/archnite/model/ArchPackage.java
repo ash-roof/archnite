@@ -9,6 +9,10 @@ import java.time.OffsetDateTime;
 @Entity
 @Table(name = "arch_packages")
 public class ArchPackage {
+
+    public ArchPackage() {
+    }
+
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "arch_packages_id_gen")
     @SequenceGenerator(name = "arch_packages_id_gen", sequenceName = "arch_packages_id_seq", allocationSize = 1)
@@ -82,4 +86,12 @@ public class ArchPackage {
         this.url = url;
     }
 
+    @Override
+    public String toString() {
+        return "{Name: " + packageName
+                + "\nArchitecture: " + architecture
+                + "\nDescription: " + description
+                + "\nLast Update: " + lastUpdate
+                + "\nURL: " + url + "}";
+    }
 }
