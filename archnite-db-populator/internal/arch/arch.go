@@ -1,12 +1,12 @@
 package arch
 
 import (
+	"archnite-db-populator/internal/utils"
 	"context"
 	"encoding/json"
 	"errors"
 	"fmt"
 	"net/http"
-	"os"
 	"sync"
 	"time"
 
@@ -37,18 +37,18 @@ var (
 )
 
 func Populate() error {
-	initDbSql, err := loadSchema("schema.sql")
+	initDbSql, err := utils.LoadSchema("./internal/arch/arch_packages.sql")
 	if err != nil {
 		return fmt.Errorf("failed to load schema: %w", err)
 	}
 
-	dbpool, err := initDbPool("postgres://postgres:secretpass@localhost:5432/archnitedb")
+	dbpool, err := utils.InitDbPool("postgres://postgres:secretpass@localhost:5432/archnitedb")
 	if err != nil {
 		return fmt.Errorf("failed to initialize database connection: %w", err)
 	}
 	defer dbpool.Close()
 
-	if err := executeSchema(dbpool, initDbSql); err != nil {
+	if err := utils.ExecuteSchema(dbpool, initDbSql); err != nil {
 		return fmt.Errorf("failed to initialize database schema: %w", err)
 	}
 
@@ -122,7 +122,7 @@ func updateDatabase(dbpool *pgxpool.Pool, packages []ArchPackage) error {
 		return fmt.Errorf("could not begin transaction: %w", err)
 	}
 	defer func() {
-		handleTransactionError(err, tx)
+		utils.HandleTransactionError(err, tx)
 	}()
 
 	deleteTag, err := tx.Exec(context.Background(), "DELETE FROM arch_packages")
@@ -159,47 +159,6 @@ func copyPackagesToDb(tx pgx.Tx, packages []ArchPackage) (int64, error) {
 		return 0, fmt.Errorf("error during CopyFrom: %w", err)
 	}
 	return copyCount, nil
-}
-
-func loadSchema(path string) (string, error) {
-	file, err := os.ReadFile(path)
-	if err != nil {
-		return "", fmt.Errorf("error loading schema.sql: %w\n", err)
-	}
-	return string(file), nil
-}
-
-func initDbPool(dbConnUrl string) (*pgxpool.Pool, error) {
-	dbpool, err := pgxpool.New(context.Background(), dbConnUrl)
-	if err != nil {
-		return nil, fmt.Errorf("unable to create connection pool: %w\n", err)
-	}
-	return dbpool, nil
-}
-
-func executeSchema(dbpool *pgxpool.Pool, schema string) error {
-	_, err := dbpool.Exec(context.Background(), schema)
-	if err != nil {
-		return fmt.Errorf("error executing schema: %w", err)
-	}
-	fmt.Println("db schema initialized")
-	return nil
-}
-
-func handleTransactionError(err error, tx pgx.Tx) {
-	if err != nil {
-		if rbErr := tx.Rollback(context.Background()); rbErr != nil {
-			fmt.Printf("error rolling back transaction: %v\n", rbErr)
-		} else {
-			fmt.Println("transaction rolled back succesfully")
-		}
-	} else {
-		if commitErr := tx.Commit(context.Background()); commitErr != nil {
-			fmt.Printf("error committing transaction: %v\n", commitErr)
-		} else {
-			fmt.Println("transaction committed succesfully")
-		}
-	}
 }
 
 func loadPageResponse(page int) (ArchResponse, error) {

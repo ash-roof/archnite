@@ -1,6 +1,7 @@
 package aur
 
 import (
+	"encoding/json"
 	"fmt"
 	"io"
 	"net/http"
@@ -26,11 +27,22 @@ import (
 //"License":["custom"],
 //"Keywords":["010","binary","hex","sweetscape"]
 
+type UnixTimestamp time.Time
+
 type AurPackage struct {
-	Name        string    `json:"Name"`
-	Description string    `json:"Description"`
-	Url         string    `json:"URL"`
-	LastUpdate  time.Time `json:"LastModified"`
+	Name        string        `json:"Name"`
+	Description string        `json:"Description"`
+	Url         string        `json:"URL"`
+	LastUpdate  UnixTimestamp `json:"LastModified"`
+}
+
+func (t *UnixTimestamp) UnmarshalJSON(b []byte) error {
+	var unixTime int64
+	if err := json.Unmarshal(b, &unixTime); err != nil {
+		return err
+	}
+	*t = UnixTimestamp(time.Unix(unixTime, 0).UTC())
+	return nil
 }
 
 func downloadFile(filepath string, url string) (err error) {
@@ -56,4 +68,19 @@ func downloadFile(filepath string, url string) (err error) {
 	}
 
 	return nil
+}
+
+func LoadAurPackages(path string) ([]AurPackage, error) {
+	pkgDump, err := os.Open(path)
+	if err != nil {
+		return []AurPackage{}, fmt.Errorf("error reading %s: %w", path, err)
+	}
+	defer pkgDump.Close()
+
+	var packages []AurPackage
+	if err = json.NewDecoder(pkgDump).Decode(&packages); err != nil {
+		return []AurPackage{}, fmt.Errorf("error parsing %s: %w", path, err)
+	}
+
+	return packages, nil
 }
