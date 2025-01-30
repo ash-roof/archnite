@@ -52,19 +52,19 @@ func Populate() error {
 		return fmt.Errorf("failed to initialize database schema: %w", err)
 	}
 
-	packages, err := loadPackages()
+	packages, err := loadArchPackages()
 	if err != nil {
-		return fmt.Errorf("failed to load packages: %w", err)
+		return fmt.Errorf("failed to load arch packages: %w", err)
 	}
 
 	if err := updateDatabase(dbpool, packages); err != nil {
-		return fmt.Errorf("failed to update database: %w", err)
+		return fmt.Errorf("failed to update arch_packages: %w", err)
 	}
 
 	return nil
 }
 
-func loadPackages() ([]ArchPackage, error) {
+func loadArchPackages() ([]ArchPackage, error) {
 	var packages []ArchPackage
 	var wg sync.WaitGroup
 	var mu sync.Mutex

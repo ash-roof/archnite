@@ -25,13 +25,13 @@ func TestLoadPageResponseUpperBound(t *testing.T) {
 	}
 }
 
-func TestLoadPackages(t *testing.T) {
-	res, err := loadPackages()
+func TestLoadArchPackages(t *testing.T) {
+	res, err := loadArchPackages()
 	if len(res) < 14000 || err != nil {
 		t.Fatalf(`loadPackages() failed: ResultsLen=%d, err=%v, want ResultsLen>14000, err=nil`, len(res), err)
 	}
 }
 
-func BenchmarkLoadPackages(b *testing.B) {
-	loadPackages()
+func BenchmarkLoadArchPackages(b *testing.B) {
+	loadArchPackages()
 }
