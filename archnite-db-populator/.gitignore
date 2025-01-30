@@ -23,3 +23,4 @@ go.work.sum
 
 archnite-db-populator
 ArchPackages.txt
+./internal/aur/pkgdump.json
