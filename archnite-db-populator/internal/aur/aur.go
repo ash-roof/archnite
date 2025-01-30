@@ -45,7 +45,7 @@ func (t *UnixTimestamp) UnmarshalJSON(b []byte) error {
 	return nil
 }
 
-func downloadFile(filepath string, url string) (err error) {
+func DownloadFile(filepath string, url string) (err error) {
 	file, err := os.Create(filepath)
 	if err != nil {
 		return fmt.Errorf("error creating file: %w", err)
@@ -70,7 +70,7 @@ func downloadFile(filepath string, url string) (err error) {
 	return nil
 }
 
-func LoadAurPackages(path string) ([]AurPackage, error) {
+func loadAurPackages(path string) ([]AurPackage, error) {
 	pkgDump, err := os.Open(path)
 	if err != nil {
 		return []AurPackage{}, fmt.Errorf("error reading %s: %w", path, err)

@@ -1,9 +1,6 @@
 package main
 
-import (
-	"archnite-db-populator/internal/aur"
-	"fmt"
-)
+import "archnite-db-populator/internal/aur"
 
 func main() {
 	// if err := arch.Populate(); err != nil {
@@ -22,14 +19,7 @@ func main() {
 	// 		}
 	// 	}
 	// }
+	//https://aur.archlinux.org/packages-meta-ext-v1.json.gz
 
-	packages, err := aur.LoadAurPackages("./internal/aur/pkgdump.json")
-	if err != nil {
-		fmt.Println(err)
-		return
-	}
-
-	for i := 0; i < len(packages); i++ {
-		fmt.Println(packages[i].Name)
-	}
+	aur.DownloadFile("./internal/aur/pkgdump.json", "https://aur.archlinux.org/packages-meta-ext-v1.json.gz")
 }
