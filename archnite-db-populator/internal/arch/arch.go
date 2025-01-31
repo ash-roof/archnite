@@ -36,13 +36,13 @@ var (
 	cacheDuration   = time.Hour * 24
 )
 
-func Populate() error {
+func Populate(dbConnUrl string) error {
 	initDbSql, err := utils.LoadSchema("./internal/arch/arch_packages.sql")
 	if err != nil {
 		return fmt.Errorf("failed to load schema: %w", err)
 	}
 
-	dbpool, err := utils.InitDbPool("postgres://postgres:secretpass@localhost:5432/archnitedb")
+	dbpool, err := utils.InitDbPool(dbConnUrl)
 	if err != nil {
 		return fmt.Errorf("failed to initialize database connection: %w", err)
 	}
@@ -70,7 +70,6 @@ func loadArchPackages() ([]ArchPackage, error) {
 	var mu sync.Mutex
 	var firstErr error
 	var once sync.Once
-	startTime := time.Now()
 	stopSignal := make(chan bool)
 	ticker := time.NewTicker(time.Millisecond * 1000)
 	defer ticker.Stop()
@@ -109,10 +108,7 @@ func loadArchPackages() ([]ArchPackage, error) {
 	if firstErr != nil {
 		return nil, firstErr
 	}
-	end := time.Now()
-	duration := end.Sub(startTime)
 
-	fmt.Println("Time taken:", duration)
 	return packages, nil
 }
 
@@ -129,13 +125,14 @@ func updateDatabase(dbpool *pgxpool.Pool, packages []ArchPackage) error {
 	if err != nil {
 		return fmt.Errorf("error deleting old packages: %w", err)
 	}
-	fmt.Println(deleteTag)
+	fmt.Print(deleteTag)
+	fmt.Println(" from arch_packages")
 
 	copyCount, err := copyPackagesToDb(tx, packages)
 	if err != nil {
-		return fmt.Errorf("error copying packages to db: %w", err)
+		return fmt.Errorf("error copying packages to arch_packages: %w", err)
 	}
-	fmt.Printf("Copied %d rows to db\n", copyCount)
+	fmt.Printf("Copied %d rows to arch_packages\n", copyCount)
 
 	return nil
 }

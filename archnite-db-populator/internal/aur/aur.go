@@ -21,7 +21,7 @@ type AurPackage struct {
 	LastUpdate  int64  `json:"LastModified"`
 }
 
-func Populate() error {
+func Populate(dbConnUrl string) error {
 	initDbSql, err := utils.LoadSchema("./internal/aur/aur_packages.sql")
 	if err != nil {
 		return fmt.Errorf("failed to load schema: %w", err)
@@ -31,7 +31,7 @@ func Populate() error {
 		return err
 	}
 
-	dbpool, err := utils.InitDbPool("postgres://postgres:secretpass@localhost:5432/archnitedb")
+	dbpool, err := utils.InitDbPool(dbConnUrl)
 	if err != nil {
 		return fmt.Errorf("failed to initialize database connection: %w", err)
 	}
@@ -66,13 +66,14 @@ func updateDatabase(dbpool *pgxpool.Pool, packages []AurPackage) error {
 	if err != nil {
 		return fmt.Errorf("error deleting old packages: %w", err)
 	}
-	fmt.Println(deleteTag)
+	fmt.Print(deleteTag)
+	fmt.Println(" from aur_packages")
 
 	copyCount, err := copyPackagesToDb(tx, packages)
 	if err != nil {
 		return fmt.Errorf("error copying packages to aur_packages: %w", err)
 	}
-	fmt.Printf("Copied %d rows to db\n", copyCount)
+	fmt.Printf("Copied %d rows to aur_packages\n", copyCount)
 
 	return nil
 }
