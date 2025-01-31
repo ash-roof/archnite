@@ -9,10 +9,10 @@ public class ArchniteApplication {
 
     public static void main(String[] args) {
         Dotenv dotenv = Dotenv.configure().directory("../").load();
-
         setEnvVar(dotenv, "SPRING_DATASOURCE_URL");
         setEnvVar(dotenv, "SPRING_DATASOURCE_USERNAME");
         setEnvVar(dotenv, "SPRING_DATASOURCE_PASSWORD");
+
         SpringApplication.run(ArchniteApplication.class, args);
     }
 
