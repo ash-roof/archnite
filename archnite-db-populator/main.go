@@ -30,11 +30,14 @@ func main() {
 		os.Exit(1)
 	}
 
-	ticker := time.NewTicker(time.Hour * 6)
-	defer ticker.Stop()
+	mainTicker := time.NewTicker(time.Hour * 6)
+	minutesToNextUpdate := 60 * 6
+	logTicker := time.NewTicker(time.Minute)
+	defer mainTicker.Stop()
+	defer logTicker.Stop()
 	for {
 		select {
-		case <-ticker.C:
+		case <-mainTicker.C:
 			if err := aur.Populate(dbConnUrl); err != nil {
 				fmt.Printf("application exited with error: %v\n", err)
 				os.Exit(1)
@@ -43,6 +46,13 @@ func main() {
 				fmt.Printf("application exited with error: %v\n", err)
 				os.Exit(1)
 			}
+		case <-logTicker.C:
+			minutesToNextUpdate -= 1
+			if minutesToNextUpdate <= 0 {
+				minutesToNextUpdate = 60 * 6
+				continue
+			}
+			fmt.Printf("minutes to next update: %d\n", minutesToNextUpdate)
 		}
 	}
 }
