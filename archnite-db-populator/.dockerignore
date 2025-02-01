@@ -1,0 +1,13 @@
+*.exe
+*.out
+*.o
+bin/
+
+vendor/
+
+.vscode/
+.idea/
+.DS_Store
+
+.git
+.gitignore

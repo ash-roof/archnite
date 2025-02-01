@@ -6,19 +6,28 @@ import (
 	"fmt"
 	"log"
 	"os"
+	"path/filepath"
 	"time"
 
 	"github.com/joho/godotenv"
 )
 
-// TODO: Refactor application logic to be more modular/reusable (create generic functions)
-
 func main() {
-	err := godotenv.Load("../.env")
-	dbConnUrl := os.Getenv("GO_DBCONN_URL")
+	if os.Getenv("DOCKER_ENV") != "true" {
+		cwd, err := os.Getwd()
+		if err != nil {
+			log.Fatal("Error getting current working directory:", err)
+		}
+		envPath := filepath.Join(cwd, "..", ".env.local")
+		err = godotenv.Load(envPath)
+		if err != nil {
+			log.Fatal("Error loading .env file:", err)
+		}
+	}
 
-	if err != nil {
-		log.Fatal("Error loading .env file")
+	dbConnUrl := os.Getenv("GO_DBCONN_URL")
+	if dbConnUrl == "" {
+		log.Fatal("GO_DBCONN_URL environment variable is not set")
 	}
 
 	if err := aur.Populate(dbConnUrl); err != nil {
