@@ -16,11 +16,6 @@ public class ArchPackageController {
         this.archPackageService = archPackageService;
     }
 
-    @GetMapping
-    public Iterable<ArchPackage> findAll() {
-        return archPackageService.findAll();
-    }
-
     @GetMapping("/search")
     public Iterable<ArchPackage> searchArchPackagesBySimilarity(@RequestParam String keyword,
                                                                 @RequestParam(defaultValue = "10") int results) {

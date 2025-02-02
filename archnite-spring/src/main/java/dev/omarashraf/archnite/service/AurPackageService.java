@@ -12,10 +12,6 @@ public class AurPackageService {
         this.aurPackageRepository = aurPackageRepository;
     }
 
-    public Iterable<AurPackage> findAll() {
-        return aurPackageRepository.findAll();
-    }
-
     public Iterable<AurPackage> searchArchPackagesBySimilarity(String keyword, int numResults) {
         return aurPackageRepository.searchAurPackagesBySimilarity(keyword, numResults);
     }

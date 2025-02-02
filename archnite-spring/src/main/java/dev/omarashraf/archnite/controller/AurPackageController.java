@@ -16,11 +16,6 @@ public class AurPackageController {
         this.aurPackageService = aurPackageService;
     }
 
-    @GetMapping
-    public Iterable<AurPackage> findAll() {
-        return aurPackageService.findAll();
-    }
-
     @GetMapping("/search")
     public Iterable<AurPackage> searchAurPackagesBySimilarity(@RequestParam String keyword,
                                                               @RequestParam(defaultValue = "10") int results ) {

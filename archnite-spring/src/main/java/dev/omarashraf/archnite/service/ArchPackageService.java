@@ -12,10 +12,6 @@ public class ArchPackageService {
         this.archPackageRepository = archPackageRepository;
     }
 
-    public Iterable<ArchPackage> findAll() {
-        return archPackageRepository.findAll();
-    }
-
     public Iterable<ArchPackage> searchArchPackagesBySimilarity(String keyword, int numResults) {
         return archPackageRepository.searchArchPackagesBySimilarity(keyword, numResults);
     }
