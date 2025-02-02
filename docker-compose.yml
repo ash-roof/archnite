@@ -17,6 +17,8 @@ services:
       interval: 5s
       retries: 5
       timeout: 3s
+    networks:
+      - app-network
 
   db-populator:
     build: ./archnite-db-populator
@@ -28,7 +30,10 @@ services:
     env_file:
       - .env
     environment:
-       GO_DBCONN_URL: ${GO_DBCONN_URL}
+      GO_DBCONN_URL: ${GO_DBCONN_URL}
+      DOCKER_ENV: "true"
+    networks:
+      - app-network
 
   spring:
     build: ./archnite-spring
@@ -43,8 +48,15 @@ services:
       SPRING_DATASOURCE_URL: ${SPRING_DATASOURCE_URL}
       SPRING_DATASOURCE_USERNAME: ${SPRING_DATASOURCE_USERNAME}
       SPRING_DATASOURCE_PASSWORD: ${SPRING_DATASOURCE_PASSWORD}
+      DOCKER_ENV: "true"
     ports:
       - 8080:8080
+    networks:
+      - app-network
 
 volumes:
   postgres_data:
+
+networks:
+  app-network:
+    driver: bridge

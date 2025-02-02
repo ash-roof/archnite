@@ -3,29 +3,47 @@ package dev.omarashraf.archnite;
 import io.github.cdimascio.dotenv.Dotenv;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.context.annotation.Bean;
-import org.springframework.jdbc.core.JdbcTemplate;
-
-import javax.sql.DataSource;
-import java.util.concurrent.TimeUnit;
 
 @SpringBootApplication
 public class ArchniteApplication {
 
     public static void main(String[] args) {
-        if (System.getenv("SPRING_DATASOURCE_URL") == null) {
-            Dotenv dotenv = Dotenv.configure().directory("../").filename(".env.local").load();
-            setEnvVar(dotenv, "SPRING_DATASOURCE_URL");
-            setEnvVar(dotenv, "SPRING_DATASOURCE_USERNAME");
-            setEnvVar(dotenv, "SPRING_DATASOURCE_PASSWORD");
+        // Load .env file from the root of the repository
+        Dotenv dotenv = Dotenv.configure()
+                .directory("../")
+                .ignoreIfMissing()
+                .load();
+
+        String datasourceUrl;
+        if (Boolean.parseBoolean(dotenv.get("DOCKER_ENV"))) {
+            datasourceUrl = dotenv.get("SPRING_DATASOURCE_URL_DOCKER");
+        } else {
+            datasourceUrl = dotenv.get("SPRING_DATASOURCE_URL_LOCAL");
         }
+
+        System.setProperty("spring.datasource.url", datasourceUrl);
+        System.setProperty("spring.datasource.username", dotenv.get("SPRING_DATASOURCE_USERNAME"));
+        System.setProperty("spring.datasource.password", dotenv.get("SPRING_DATASOURCE_PASSWORD"));
+
         SpringApplication.run(ArchniteApplication.class, args);
     }
 
-    private static void setEnvVar(Dotenv dotenv, String key) {
-        String value = dotenv.get(key);
-        if (value != null && System.getenv(key) == null) {
-            System.setProperty(key, value);
-        }
-    }
+//        // Load .env file from the root of the repository
+//        Dotenv dotenv = Dotenv.configure()
+//                .directory("../")
+//                .ignoreIfMissing()
+//                .load();
+//
+//        // Debug: Print environment variables
+//        System.out.println("SPRING_DATASOURCE_URL_LOCAL: " + dotenv.get("SPRING_DATASOURCE_URL_LOCAL"));
+//        System.out.println("SPRING_DATASOURCE_URL_DOCKER: " + dotenv.get("SPRING_DATASOURCE_URL_DOCKER"));
+//        System.out.println("SPRING_DATASOURCE_USERNAME: " + dotenv.get("SPRING_DATASOURCE_USERNAME"));
+//        System.out.println("SPRING_DATASOURCE_PASSWORD: " + dotenv.get("SPRING_DATASOURCE_PASSWORD"));
+//
+//        // Set environment variables
+//        System.setProperty("spring.datasource.url", dotenv.get("SPRING_DATASOURCE_URL_DOCKER"));
+//        System.setProperty("spring.datasource.username", dotenv.get("SPRING_DATASOURCE_USERNAME"));
+//        System.setProperty("spring.datasource.password", dotenv.get("SPRING_DATASOURCE_PASSWORD"));
+//
+//        SpringApplication.run(ArchniteApplication.class, args);
 }

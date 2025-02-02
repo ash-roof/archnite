@@ -13,16 +13,21 @@ import (
 )
 
 func main() {
-	if os.Getenv("GO_DBCONN_URL") == "" {
-		envPath := filepath.Join("..", ".env.local")
-		if err := godotenv.Load(envPath); err != nil {
-			log.Println("Info: No .env.local file found. Assuming environment variables are already set.")
-		}
+	// Load .env file from the root of the repository
+	envPath := filepath.Join("..", ".env")
+	if err := godotenv.Load(envPath); err != nil {
+		log.Println("Info: No .env file found. Assuming environment variables are already set.")
 	}
 
-	dbConnUrl := os.Getenv("GO_DBCONN_URL")
+	var dbConnUrl string
+	if os.Getenv("DOCKER_ENV") == "true" {
+		dbConnUrl = os.Getenv("GO_DBCONN_URL_DOCKER")
+	} else {
+		dbConnUrl = os.Getenv("GO_DBCONN_URL_LOCAL")
+	}
+
 	if dbConnUrl == "" {
-		log.Fatal("Error: GO_DBCONN_URL environment variable is not set. Ensure it's provided via environment variables or .env.local in the repo root")
+		log.Fatal("Error: Database connection URL is not set. Ensure GO_DBCONN_URL_DOCKER or GO_DBCONN_URL_LOCAL is provided in the .env file.")
 	}
 
 	if err := aur.Populate(dbConnUrl); err != nil {

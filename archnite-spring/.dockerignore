@@ -4,15 +4,13 @@
 *.swp
 *.swo
 
-# Ignore Go build artifacts
-bin/
-pkg/
-*.exe
-*.test
-*.out
+# Ignore Maven build artifacts
+target/
+*.jar
+*.war
 
-# Ignore dependency directories (if using Go modules)
-vendor/
+# Ignore Maven local repository
+.m2/
 
 .env.example
 
