@@ -132,7 +132,7 @@ func updateDatabase(dbpool *pgxpool.Pool, packages []ArchPackage) error {
 	if err != nil {
 		return fmt.Errorf("error copying packages to arch_packages: %w", err)
 	}
-	fmt.Printf("Copied %d rows to arch_packages\n", copyCount)
+	fmt.Printf("COPY %d rows to arch_packages\n", copyCount)
 
 	return nil
 }

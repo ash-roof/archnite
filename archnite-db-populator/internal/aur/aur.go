@@ -73,7 +73,7 @@ func updateDatabase(dbpool *pgxpool.Pool, packages []AurPackage) error {
 	if err != nil {
 		return fmt.Errorf("error copying packages to aur_packages: %w", err)
 	}
-	fmt.Printf("Copied %d rows to aur_packages\n", copyCount)
+	fmt.Printf("COPY %d rows to aur_packages\n", copyCount)
 
 	return nil
 }

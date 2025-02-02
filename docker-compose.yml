@@ -1,6 +1,7 @@
 services:
-  postgres:
+  db:
     image: postgres:latest
+    container_name: postgres
     env_file:
       - .env
     environment:
@@ -22,25 +23,26 @@ services:
     container_name: db-populator
     restart: always
     depends_on:
-       postgres:
+       db:
           condition: service_healthy
     env_file:
       - .env
     environment:
        GO_DBCONN_URL: ${GO_DBCONN_URL}
-       DOCKER_ENV: "true"
 
   spring:
     build: ./archnite-spring
     container_name: spring
     restart: always
     depends_on:
-       postgres:
+       db:
           condition: service_healthy
     env_file:
       - .env
     environment:
-      DOCKER_ENV: "true"
+      SPRING_DATASOURCE_URL: ${SPRING_DATASOURCE_URL}
+      SPRING_DATASOURCE_USERNAME: ${SPRING_DATASOURCE_USERNAME}
+      SPRING_DATASOURCE_PASSWORD: ${SPRING_DATASOURCE_PASSWORD}
     ports:
       - 8080:8080
 

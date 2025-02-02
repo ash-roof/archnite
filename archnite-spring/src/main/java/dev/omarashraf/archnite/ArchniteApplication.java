@@ -13,8 +13,7 @@ import java.util.concurrent.TimeUnit;
 public class ArchniteApplication {
 
     public static void main(String[] args) {
-        // use .env.local in case of running outside of docker
-        if (System.getenv("DOCKER_ENV") == null) {
+        if (System.getenv("SPRING_DATASOURCE_URL") == null) {
             Dotenv dotenv = Dotenv.configure().directory("../").filename(".env.local").load();
             setEnvVar(dotenv, "SPRING_DATASOURCE_URL");
             setEnvVar(dotenv, "SPRING_DATASOURCE_USERNAME");
