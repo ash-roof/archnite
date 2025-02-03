@@ -14,6 +14,10 @@ public class ArchPackageService {
         this.archPackageRepository = archPackageRepository;
     }
 
+    public ArchPackage getArchPackageByPackageName(String packageName) {
+        return archPackageRepository.getArchPackageByPackageName(packageName);
+    }
+
     public List<ArchPackage> searchArchPackagesBySimilarity(String keyword, int limit) {
         return archPackageRepository.searchArchPackagesBySimilarity(keyword, limit);
     }

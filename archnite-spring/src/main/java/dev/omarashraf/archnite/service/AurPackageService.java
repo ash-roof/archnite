@@ -14,6 +14,10 @@ public class AurPackageService {
         this.aurPackageRepository = aurPackageRepository;
     }
 
+    public AurPackage getAurPackageByPackageName(String packageName) {
+        return aurPackageRepository.getAurPackageByPackageName(packageName);
+    }
+
     public List<AurPackage> searchArchPackagesBySimilarity(String keyword, int limit) {
         return aurPackageRepository.searchAurPackagesBySimilarity(keyword, limit);
     }
