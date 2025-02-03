@@ -4,6 +4,8 @@ import dev.omarashraf.archnite.model.AurPackage;
 import dev.omarashraf.archnite.repository.AurPackageRepository;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 public class AurPackageService {
     private final AurPackageRepository aurPackageRepository;
@@ -12,7 +14,7 @@ public class AurPackageService {
         this.aurPackageRepository = aurPackageRepository;
     }
 
-    public Iterable<AurPackage> searchArchPackagesBySimilarity(String keyword, int numResults) {
-        return aurPackageRepository.searchAurPackagesBySimilarity(keyword, numResults);
+    public List<AurPackage> searchArchPackagesBySimilarity(String keyword, int limit) {
+        return aurPackageRepository.searchAurPackagesBySimilarity(keyword, limit);
     }
 }

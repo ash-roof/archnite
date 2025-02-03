@@ -34,7 +34,7 @@ I also started the project with the purpose of it being a learning experience so
 archnite was built using the following technologies:
 
 - Spring Boot
-  - Used to create the JSON REST API responsible for querying the database for package metadata.
+  - Used to create the JSON API responsible for querying the database for package metadata.
 - Go
   - Used to build the DB Populator standalone binary which automatically fetches updated package metadata, serializes it and populates
   the necessary PostgreSQL tables.
