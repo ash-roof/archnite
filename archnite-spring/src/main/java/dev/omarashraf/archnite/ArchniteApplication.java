@@ -27,23 +27,4 @@ public class ArchniteApplication {
 
         SpringApplication.run(ArchniteApplication.class, args);
     }
-
-//        // Load .env file from the root of the repository
-//        Dotenv dotenv = Dotenv.configure()
-//                .directory("../")
-//                .ignoreIfMissing()
-//                .load();
-//
-//        // Debug: Print environment variables
-//        System.out.println("SPRING_DATASOURCE_URL_LOCAL: " + dotenv.get("SPRING_DATASOURCE_URL_LOCAL"));
-//        System.out.println("SPRING_DATASOURCE_URL_DOCKER: " + dotenv.get("SPRING_DATASOURCE_URL_DOCKER"));
-//        System.out.println("SPRING_DATASOURCE_USERNAME: " + dotenv.get("SPRING_DATASOURCE_USERNAME"));
-//        System.out.println("SPRING_DATASOURCE_PASSWORD: " + dotenv.get("SPRING_DATASOURCE_PASSWORD"));
-//
-//        // Set environment variables
-//        System.setProperty("spring.datasource.url", dotenv.get("SPRING_DATASOURCE_URL_DOCKER"));
-//        System.setProperty("spring.datasource.username", dotenv.get("SPRING_DATASOURCE_USERNAME"));
-//        System.setProperty("spring.datasource.password", dotenv.get("SPRING_DATASOURCE_PASSWORD"));
-//
-//        SpringApplication.run(ArchniteApplication.class, args);
 }
