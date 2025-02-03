@@ -20,7 +20,7 @@ func main() {
 	}
 
 	var dbConnUrl string
-	if os.Getenv("DOCKER_ENV") == "true" {
+	if os.Getenv("DOCKER_COMPOSE_ENV") == "true" {
 		dbConnUrl = os.Getenv("GO_DBCONN_URL_DOCKER")
 	} else {
 		dbConnUrl = os.Getenv("GO_DBCONN_URL_LOCAL")

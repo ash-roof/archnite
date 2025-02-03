@@ -15,7 +15,7 @@ public class ArchniteApplication {
                 .load();
 
         String datasourceUrl;
-        if (Boolean.parseBoolean(dotenv.get("DOCKER_ENV"))) {
+        if (Boolean.parseBoolean(dotenv.get("DOCKER_COMPOSE_ENV"))) {
             datasourceUrl = dotenv.get("SPRING_DATASOURCE_URL_DOCKER");
         } else {
             datasourceUrl = dotenv.get("SPRING_DATASOURCE_URL_LOCAL");

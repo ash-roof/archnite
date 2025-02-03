@@ -14,7 +14,7 @@ RUN CGO_ENABLED=0 GOOS=linux go build -o archnite-db-populator .
 FROM builder AS tester
 RUN go test -v ./...
 
-FROM alpine:3.20
+FROM alpine:3.20 AS final
 
 WORKDIR /app
 
