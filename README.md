@@ -49,13 +49,56 @@ archnite was built using the following technologies:
 To be honest, this project would have been perfectly fine and probably better off with just Go or Spring Boot, but as I said this is
 mainly a learning-based endeavor and these are the technologies I wanted to try out and get experience with (especially Go).
 
-That being said, I do like the stack I chose and I feel each technology fits its use case well and gives a good foundation for expanding the app.
+That being said, I do like the stack I chose and I feel each technology fits its use case well and gives a good foundation for expanding the app,
+even if it's not optimal.
 
 ## Getting Started
 
+There are three ways you can run this project:
+
+1. The easiest way is to run the entire service stack with Docker Compose using the provided [docker-compose.yml](./docker-compose.yml) file.
+This will spin up an instance of PostgreSQL, setup the app's database used by the Spring Boot and Go projects and start containers running
+the Go, Spring Boot & Angular projects.
+
+2. Run the individual project containers using Docker and each project's Dockerfile. This method requires the manual setup of a PostgreSQL instance on
+your machine and the creation of an empty database within this instance.
+
+3. Run the individual projects locally using each project's needed dependencies installed on your machine. This method also requires a running
+PostgreSQL instance with an empty database.
+
+For the rest of the [Getting Started](#getting-started) section, these numbers will be used to
+reference each method (1 = Docker Compose, 2 = Docker Individual Containers, 3 = Local Dependencies).
+
 ### Prerequisites
 
-### Running Locally
+#### Important
+
+**As mentioned above, methods 2 and 3 require a local PostgreSQL instance running on your machine with an empty database created. I recommend
+spinning up a PostgreSQL Docker Container on your local machine if you choose any of these, using the following command:**
+
+```bash
+docker run --name archnite-postgres \
+  -e POSTGRES_PASSWORD=password \
+  -e POSTGRES_DB=exampledb \
+  -p 5432:5432 \
+  -d postgres
+```
+
+This will create a PostgreSQL container named `archnite-postgres` containing a
+database named `exampledb` with the password of `password` running on port `5432` on your local machine.
+
+---
+
+These are the dependencies you'll need to run the project based on your chosen method:
+
+1. Docker & Docker Compose
+2. Docker
+3. For:
+    - archnite-spring: JDK 21
+    - archnite-db-populator: Go 1.23
+    - archnite-client: TBD (probably npm or something)
+
+### Running The Project
 
 ## Environment Variables
 
