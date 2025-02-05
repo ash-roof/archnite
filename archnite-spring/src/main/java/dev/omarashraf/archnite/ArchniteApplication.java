@@ -14,12 +14,9 @@ public class ArchniteApplication {
                 .ignoreIfMissing()
                 .load();
 
-        String datasourceUrl;
-        if (Boolean.parseBoolean(dotenv.get("DOCKER_COMPOSE_ENV"))) {
-            datasourceUrl = dotenv.get("SPRING_DATASOURCE_URL_DOCKER");
-        } else {
-            datasourceUrl = dotenv.get("SPRING_DATASOURCE_URL_LOCAL");
-        }
+        String datasourceUrl = Boolean.parseBoolean(dotenv.get("DOCKER_COMPOSE_ENV"))
+                ? dotenv.get("SPRING_DATASOURCE_URL_DOCKER")
+                : dotenv.get("SPRING_DATASOURCE_URL_LOCAL");
 
         System.setProperty("spring.datasource.url", datasourceUrl);
         System.setProperty("spring.datasource.username", dotenv.get("SPRING_DATASOURCE_USERNAME"));
