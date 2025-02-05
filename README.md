@@ -11,7 +11,7 @@ for their favorite packages from the Arch official repos as well as the AUR usin
         - [Why Go & Spring Boot?](#why-go--spring-boot)
 2. [Getting Started](#getting-started)
     - [Prerequisites](#prerequisites)
-    - [Running Locally](#running-locally)
+    - [Running The Project](#running-the-project)
 3. [Environment Variables](#environment-variables)
 4. [Contributing](#contributing)
 5. [Roadmap](#roadmap)
