@@ -10,11 +10,13 @@ for their favorite packages from the Arch official repos as well as the AUR usin
     - [Architecture & Tech Stack](#architecture--tech-stack)
         - [Why Go & Spring Boot?](#why-go--spring-boot)
 2. [Getting Started](#getting-started)
+    - [Environment Variables](#environment-variables)
     - [Prerequisites](#prerequisites)
     - [Running The Project](#running-the-project)
-3. [Environment Variables](#environment-variables)
-4. [Contributing](#contributing)
-5. [Roadmap](#roadmap)
+        - [Docker Compose](#1-docker-compose)
+        - [Docker](#2-docker)
+3. [Contributing](#contributing)
+4. [Roadmap](#roadmap)
 
 ## About The Project
 
@@ -54,7 +56,14 @@ even if it's not optimal.
 
 ## Getting Started
 
-There are three ways you can run this project:
+Clone the project:
+
+```bash
+git clone https://github.com/OmarAshraf-02/archnite.git
+cd archnite
+```
+
+**There are three ways you can run this project:**
 
 1. The easiest way is to run the entire service stack with Docker Compose using the provided [docker-compose.yml](./docker-compose.yml) file.
 This will spin up an instance of PostgreSQL, setup the app's database used by the Spring Boot and Go projects and start containers running
@@ -69,38 +78,113 @@ PostgreSQL instance with an empty database.
 For the rest of the [Getting Started](#getting-started) section, these numbers will be used to
 reference each method (1 = Docker Compose, 2 = Docker Individual Containers, 3 = Local Dependencies).
 
-### Prerequisites
+### Environment Variables
 
-#### Important
+**IMPORTANT**: Before continuing, please setup your .env file containing environment variables used to create/connect
+to the PostgreSQL database needed by archnite. A [.env.example](./.env.example) file has been created for this purpose:
+
+1. Create a copy of the `.env.example` file named `.env` in the root of the archnite repo.
+
+You can use the following command for this on macOS, Linux or WSL (or any Unix-like environment/shell):
+
+```bash
+cp .env.example .env
+```
+
+2. (Optional) You can edit the variables in `.env` depending on your database setup.
+
+### Prerequisites
 
 **As mentioned above, methods 2 and 3 require a local PostgreSQL instance running on your machine with an empty database created. I recommend
 spinning up a PostgreSQL Docker Container on your local machine if you choose any of these, using the following command:**
 
 ```bash
 docker run --name archnite-postgres \
-  -e POSTGRES_PASSWORD=password \
-  -e POSTGRES_DB=exampledb \
+  --env-file path/to/archnite/root/.env \
   -p 5432:5432 \
   -d postgres
 ```
 
-This will create a PostgreSQL container named `archnite-postgres` containing a
-database named `exampledb` with the password of `password` running on port `5432` on your local machine.
+Replace the first `5432` with any other port if you don't want to use `5432` on your local machine
+(*just make sure to reflect this change on `POSTGRES_PORT` in `.env`*).
+
+This will create a PostgreSQL container named `archnite-postgres` which contains an
+empty database, created using the environment variables specified in the `.env` file.
+You can now start and stop this container using:
+
+```bash
+docker start archnite-postgres
+```
+
+and
+
+```bash
+docker stop archnite-postgres
+```
 
 ---
 
-These are the dependencies you'll need to run the project based on your chosen method:
+These are the dependencies you'll need to run the project based on your chosen method (excluding PostgreSQL if using 2 or 3):
 
 1. Docker & Docker Compose
 2. Docker
 3. For:
     - archnite-spring: JDK 21
     - archnite-db-populator: Go 1.23
-    - archnite-client: TBD (probably npm or something)
+    - archnite-client: Node.js 22 & the Angular CLI using `npm install -g @angular/cli`
 
 ### Running The Project
 
-## Environment Variables
+#### 1. Docker Compose
+
+Run the project stack using (make sure you're in the project root):
+
+```bash
+docker compose up --build
+```
+
+You can optionally add the `-d` flag to run in detached mode.
+You can now find:
+
+- The Spring Boot project (archnite-spring) running on localhost:`SPRING_PORT` from your `.env`
+- The Angular client (archnite-client) running on port localhost:`CLIENT_PORT` from your `.env`
+- The Go project (archnite-db-populator) binary running
+
+Stop and remove the containers using:
+
+```bash
+docker compose down
+```
+
+#### 2. Docker
+
+Once you have your `.env` file setup correctly and your PostgreSQL instance running:
+
+For the Go project (archnite-db-populator):
+
+```bash
+cd archnite-db-populator
+docker build -t archnite-db-populator .
+docker run --env-file ../.env --network="host" archnite-db-populator:latest
+```
+
+For the Spring Boot project (archnite-spring):
+
+```bash
+cd archnite-spring
+docker build -t archnite-spring .
+docker run --env-file ../.env --network="host" archnite-spring:latest
+```
+
+You'll find the Spring Boot project running on localhost:`SPRING_PORT`
+
+For the Angular project (archnite-client):
+
+```bash
+cd archnite-client
+docker build -t archnite-client .
+docker run --env-file ../.env --network="host" archnite-client:latest
+```
 
 ## Contributing
 

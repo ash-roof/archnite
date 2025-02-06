@@ -42,7 +42,7 @@ services:
     environment:
       DOCKER_COMPOSE_ENV: "true"
     ports:
-      - 8080:8080
+      - ${SPRING_PORT}:8080
     networks:
       - app-network
 
