@@ -15,12 +15,12 @@ public class ArchniteApplication {
                 .load();
 
         String datasourceUrl = Boolean.parseBoolean(dotenv.get("DOCKER_COMPOSE_ENV"))
-                ? dotenv.get("SPRING_DATASOURCE_URL_DOCKER")
-                : dotenv.get("SPRING_DATASOURCE_URL_LOCAL");
+                ? "jdbc:postgresql://postgres:" + dotenv.get("POSTGRES_PORT") + "/" + dotenv.get("POSTGRES_DB")
+                : "jdbc:postgresql://localhost:" + dotenv.get("POSTGRES_PORT") + "/" + dotenv.get("POSTGRES_DB");
 
         System.setProperty("spring.datasource.url", datasourceUrl);
-        System.setProperty("spring.datasource.username", dotenv.get("SPRING_DATASOURCE_USERNAME"));
-        System.setProperty("spring.datasource.password", dotenv.get("SPRING_DATASOURCE_PASSWORD"));
+        System.setProperty("spring.datasource.username", dotenv.get("POSTGRES_USER"));
+        System.setProperty("spring.datasource.password", dotenv.get("POSTGRES_PASSWORD"));
 
         SpringApplication.run(ArchniteApplication.class, args);
     }

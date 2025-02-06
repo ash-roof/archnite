@@ -19,11 +19,11 @@ func main() {
 		log.Println("Info: No .env file found. Assuming environment variables are already set.")
 	}
 
-	var dbConnUrl string
+	var dbConnUrl string = "postgres://" + os.Getenv("POSTGRES_USER") + ":" + os.Getenv("POSTGRES_PASSWORD") + "@"
 	if os.Getenv("DOCKER_COMPOSE_ENV") == "true" {
-		dbConnUrl = os.Getenv("GO_DBCONN_URL_DOCKER")
+		dbConnUrl += "postgres:" + os.Getenv("POSTGRES_PORT") + "/" + os.Getenv("POSTGRES_DB")
 	} else {
-		dbConnUrl = os.Getenv("GO_DBCONN_URL_LOCAL")
+		dbConnUrl += "localhost:" + os.Getenv("POSTGRES_PORT") + "/" + os.Getenv("POSTGRES_DB")
 	}
 
 	if dbConnUrl == "" {

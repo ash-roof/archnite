@@ -62,12 +62,12 @@ func updateDatabase(dbpool *pgxpool.Pool, packages []AurPackage) error {
 		utils.HandleTransactionError(err, tx)
 	}()
 
-	deleteTag, err := tx.Exec(context.Background(), "DELETE FROM aur_packages")
+	deleteTag, err := tx.Exec(context.Background(), "TRUNCATE TABLE aur_packages RESTART IDENTITY")
 	if err != nil {
 		return fmt.Errorf("error deleting old packages: %w", err)
 	}
 	fmt.Print(deleteTag)
-	fmt.Println(" from aur_packages")
+	fmt.Println(" aur_packages")
 
 	copyCount, err := copyPackagesToDb(tx, packages)
 	if err != nil {
