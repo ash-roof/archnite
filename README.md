@@ -318,4 +318,4 @@ for more details).
 ## Roadmap
 
 - [ ] Improve unit tests and make them more comprehensive
-- [ ] Add more routes and options to the API
+- [ ] Add more routes to the API
