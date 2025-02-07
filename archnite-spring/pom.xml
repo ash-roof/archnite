@@ -10,9 +10,9 @@
     </parent>
     <groupId>dev.omarashraf</groupId>
     <artifactId>archnite</artifactId>
-    <version>0.0.1-SNAPSHOT</version>
+    <version>1.0.0</version>
     <name>archnite</name>
-    <description>archnite</description>
+    <description>archnite Spring Boot API</description>
     <url/>
     <licenses>
         <license/>

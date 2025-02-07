@@ -1,7 +1,9 @@
 # archnite
 
-archnite is a full stack web app to help users of both Arch Linux and Arch-based distros quickly generate package install commands
-for their favorite packages from the Arch official repos as well as the AUR using pacman or your preferred AUR helper.
+archnite is a full stack web app to help users of both Arch Linux and
+Arch-based distros quickly generate package install commands
+for their favorite packages from the Arch official repos as well
+as the AUR using pacman or your preferred AUR helper.
 
 ## Table of Contents
 
@@ -15,6 +17,7 @@ for their favorite packages from the Arch official repos as well as the AUR usin
     - [Running The Project](#running-the-project)
         - [Docker Compose](#1-docker-compose)
         - [Docker](#2-docker)
+        - [Manual Setup](#3-manual-setup)
 3. [Contributing](#contributing)
 4. [Roadmap](#roadmap)
 
@@ -22,36 +25,47 @@ for their favorite packages from the Arch official repos as well as the AUR usin
 
 ### Motivation & Inspiration
 
-I made archnite due to a couple of reasons. Mainly, it was to solve a small issue I had when setting up a
-new Arch Linux system; I always found it tedious to look up package names and typing out install commands.
+I made archnite due to a couple of reasons. Mainly, it was to
+solve a small issue I had when setting up a new Arch Linux system;
+I always found it tedious to look up package names and typing out install commands.
 
-I wanted to make a tool similar to [Ninite](https://ninite.com/) (where I got the inspiration for the name, yes boring I know) where I could use
-a autocomplete/incremental search box similar to what a search engine has, and/or pick from a list of popular packages, select my
+I wanted to make a tool similar to [Ninite](https://ninite.com/)
+(where I got the inspiration for the name, yes boring I know) where I could use
+a autocomplete/incremental search box similar to what a search engine has,
+and/or pick from a list of popular packages, select my
 desired packages and get an install command I could paste into my terminal.
 
-I also started the project with the purpose of it being a learning experience so I could try out some technologies I've always wanted to experiment with.
+I also started the project with the purpose of it being a learning experience
+so I could try out some technologies I've always wanted to experiment with.
 
 ### Architecture & Tech Stack
 
 archnite was built using the following technologies:
 
 - Spring Boot
-  - Used to create the JSON API responsible for querying the database for package metadata.
+  - Used to create the JSON API responsible for querying the
+  database for package metadata.
 - Go
-  - Used to build the DB Populator standalone binary which automatically fetches updated package metadata, serializes it and populates
-  the necessary PostgreSQL tables.
+  - Used to build the DB Populator standalone binary which automatically fetches
+  updated package metadata, serializes it and populates the necessary
+  PostgreSQL tables.
 - PostgreSQL
-  - Used to store package metadata and apply a trigram index to package names for fast package lookup, allowing for incremental search in our client.
+  - Used to store package metadata and apply a trigram index to package names for
+  fast package lookup, allowing for incremental search in our client.
 - Angular
 - Docker & Docker Compose
-  - Fully containerised the app with a provided docker-compose.yml file to easily spin up all project services.
+  - Fully containerised the app with a provided docker-compose.yml file
+  to easily spin up all project services.
 
 #### Why Go & Spring Boot?
 
-To be honest, this project would have been perfectly fine and probably better off with just Go or Spring Boot, but as I said this is
-mainly a learning-based endeavor and these are the technologies I wanted to try out and get experience with (especially Go).
+To be honest, this project would have been perfectly fine and probably better
+off with just Go or Spring Boot, but as I said this is mainly a learning-based
+endeavor and these are the technologies I wanted to try out and get
+experience with (especially Go).
 
-That being said, I do like the stack I chose and I feel each technology fits its use case well and gives a good foundation for expanding the app,
+That being said, I do like the stack I chose and I feel each technology fits
+its use case well and gives a good foundation for expanding the app,
 even if it's not optimal.
 
 ## Getting Started
@@ -65,38 +79,48 @@ cd archnite
 
 **There are three ways you can run this project:**
 
-1. The easiest way is to run the entire service stack with Docker Compose using the provided [docker-compose.yml](./docker-compose.yml) file.
-This will spin up an instance of PostgreSQL, setup the app's database used by the Spring Boot and Go projects and start containers running
-the Go, Spring Boot & Angular projects.
+1. The easiest way is to run the entire service stack with Docker Compose using
+the provided [docker-compose.yml](./docker-compose.yml) file. This will spin up an
+instance of PostgreSQL, setup the app's database used by the Spring Boot
+and Go projects and start containers running the Go, Spring Boot & Angular projects.
 
-2. Run the individual project containers using Docker and each project's Dockerfile. This method requires the manual setup of a PostgreSQL instance on
+2. Run the individual project containers using Docker and each project's Dockerfile.
+This method requires the manual setup of a PostgreSQL instance on
 your machine and the creation of an empty database within this instance.
 
-3. Run the individual projects locally using each project's needed dependencies installed on your machine. This method also requires a running
+3. Run the individual projects locally using each project's needed dependencies
+installed on your machine. This method also requires a running
 PostgreSQL instance with an empty database.
 
-For the rest of the [Getting Started](#getting-started) section, these numbers will be used to
-reference each method (1 = Docker Compose, 2 = Docker Individual Containers, 3 = Local Dependencies).
+For the rest of the [Getting Started](#getting-started) section,
+these numbers will be used to reference each method
+(1 = Docker Compose, 2 = Docker Individual Containers, 3 = Local Dependencies).
 
 ### Environment Variables
 
-**IMPORTANT**: Before continuing, please setup your .env file containing environment variables used to create/connect
-to the PostgreSQL database needed by archnite. A [.env.example](./.env.example) file has been created for this purpose:
+**IMPORTANT**: Before continuing, please setup your .env file containing
+environment variables used to create/connect to the PostgreSQL database
+needed by archnite. A [.env.example](./.env.example) file
+has been created for this purpose:
 
-1. Create a copy of the `.env.example` file named `.env` in the root of the archnite repo.
+1. Create a copy of the `.env.example` file named `.env`
+in the root of the archnite repo.
 
-You can use the following command for this on macOS, Linux or WSL (or any Unix-like environment/shell):
+    You can use the following command for this on macOS, Linux or WSL
+    (or any Unix-like environment/shell):
 
-```bash
-cp .env.example .env
-```
+    ```bash
+    cp .env.example .env
+    ```
 
 2. (Optional) You can edit the variables in `.env` depending on your database setup.
 
 ### Prerequisites
 
-**As mentioned above, methods 2 and 3 require a local PostgreSQL instance running on your machine with an empty database created. I recommend
-spinning up a PostgreSQL Docker Container on your local machine if you choose any of these, using the following command:**
+**As mentioned above, methods 2 and 3 require a local PostgreSQL instance
+running on your machine with an empty database created. I recommend
+spinning up a PostgreSQL Docker Container on your local machine
+if you choose any of these, using the following command:**
 
 ```bash
 docker run --name archnite-postgres \
@@ -105,11 +129,14 @@ docker run --name archnite-postgres \
   -d postgres
 ```
 
-Replace the first `5432` with any other port if you don't want to use `5432` on your local machine
-(*just make sure to reflect this change on `POSTGRES_PORT` in `.env`*).
+Replace the first `5432` with any other port if you don't want
+to use `5432` on your local machine (*just make sure to reflect
+this change on `POSTGRES_PORT` in `.env`*).
 
-This will create a PostgreSQL container named `archnite-postgres` which contains an
-empty database, created using the environment variables specified in the `.env` file.
+This will create a PostgreSQL container named `archnite-postgres`
+which contains an empty database, created using the environment
+variables specified in the `.env` file.
+
 You can now start and stop this container using:
 
 ```bash
@@ -124,7 +151,8 @@ docker stop archnite-postgres
 
 ---
 
-These are the dependencies you'll need to run the project based on your chosen method (excluding PostgreSQL if using 2 or 3):
+These are the dependencies you'll need to run the project based on
+your chosen method (excluding PostgreSQL if using 2 or 3):
 
 1. Docker & Docker Compose
 2. Docker
@@ -146,8 +174,10 @@ docker compose up --build
 You can optionally add the `-d` flag to run in detached mode.
 You can now find:
 
-- The Spring Boot project (archnite-spring) running on localhost:`SPRING_PORT` from your `.env`
-- The Angular client (archnite-client) running on port localhost:`CLIENT_PORT` from your `.env`
+- The Spring Boot project (archnite-spring) running on
+localhost:`SPRING_PORT` from your `.env`
+- The Angular client (archnite-client) running on
+localhost:`CLIENT_PORT` from your `.env`
 - The Go project (archnite-db-populator) binary running
 
 Stop and remove the containers using:
@@ -160,7 +190,7 @@ docker compose down
 
 Once you have your `.env` file setup correctly and your PostgreSQL instance running:
 
-For the Go project (archnite-db-populator):
+##### For the Go project (archnite-db-populator)
 
 ```bash
 cd archnite-db-populator
@@ -168,7 +198,7 @@ docker build -t archnite-db-populator .
 docker run --env-file ../.env --network="host" archnite-db-populator:latest
 ```
 
-For the Spring Boot project (archnite-spring):
+##### For the Spring Boot project (archnite-spring)
 
 ```bash
 cd archnite-spring
@@ -178,7 +208,7 @@ docker run --env-file ../.env --network="host" archnite-spring:latest
 
 You'll find the Spring Boot project running on localhost:`SPRING_PORT`
 
-For the Angular project (archnite-client):
+##### For the Angular project (archnite-client)
 
 ```bash
 cd archnite-client
@@ -186,6 +216,106 @@ docker build -t archnite-client .
 docker run --env-file ../.env --network="host" archnite-client:latest
 ```
 
+You'll find the Angular project running on localhost:`CLIENT_PORT`
+
+#### 3. Manual Setup
+
+Once you have your `.env` file setup correctly and your PostgreSQL instance running:
+
+##### Go project (archnite-db-populator)
+
+First download the required dependencies:
+
+```bash
+cd archnite-db-populator
+go mod tidy
+```
+
+then run:
+
+```bash
+go build
+./archnite-db-populator
+```
+
+or just run [main.go](./archnite-db-populator/main.go)
+
+```bash
+go run ./main.go
+```
+
+For unit tests:
+
+```bash
+go test -v ./...
+```
+
+**Please note that unit tests will take up to 100 seconds to run due to
+the speed of the Arch official package repos' API speed. If anyone
+has an alternate method of fetching Arch official package metadata
+which would be faster (like I've done for AUR packages), please let me know.**
+
+##### Spring Boot project (archnite-spring)
+
+To download required dependencies and build the project using
+the included Maven wrapper (or just use `mvn` if you have it installed
+locally):
+
+```bash
+cd archnite-spring
+./mvnw clean install
+```
+
+then
+
+```bash
+./mvnw spring-boot:run
+```
+
+or just run the JAR File:
+
+```bash
+java -jar target/archnite-1.0.0.jar
+```
+
+For unit tests:
+
+```bash
+./mvnw test
+```
+
 ## Contributing
 
+This is my first open-source project, so I'll try to keep things simple
+and flexible for the time being. This is a learning exercise for me with
+these technologies, so feel free to open issues & discussion,
+suggest improvements, features or bug fixes. Any contribution
+is welcome and I'd love to learn from anyone more
+experienced with any part of this stack.
+
+### Contribution Guide
+
+1. Fork the repo
+2. Clone the fork and create a new branch
+
+    ```bash
+    git clone https://github.com/your-username/archnite.git
+    cd archnite
+    git checkout -b feature-or-bugfix-name
+    ```
+
+3. Make your changes and run the tests for the project(s)
+you changed (go to [Running The Project](#running-the-project)
+for more details).
+
+4. Commit and push to your fork
+
+    ```bash
+    git commit -m "Added x / Fixed y"
+    git push origin feature-or-bugfix-name
+    ```
+
 ## Roadmap
+
+- [ ] Improve unit tests and make them more comprehensive
+- [ ] Add more routes and options to the API
