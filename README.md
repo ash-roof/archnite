@@ -244,17 +244,6 @@ or just run [main.go](./archnite-db-populator/main.go)
 go run ./main.go
 ```
 
-For unit tests:
-
-```bash
-go test -v ./...
-```
-
-**Please note that unit tests will take up to 100 seconds to run due to
-the speed of the Arch official package repos' API speed. If anyone
-has an alternate method of fetching Arch official package metadata
-which would be faster (like I've done for AUR packages), please let me know.**
-
 ##### Spring Boot project (archnite-spring)
 
 To download required dependencies and build the project using
@@ -314,8 +303,3 @@ for more details).
     git commit -m "Added x / Fixed y"
     git push origin feature-or-bugfix-name
     ```
-
-## Roadmap
-
-- [ ] Improve unit tests and make them more comprehensive
-- [ ] Add more routes to the API
