@@ -12,12 +12,14 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+@Validated
 @RestController
 @RequestMapping("/api/v1/arch")
 public class ArchPackageControllerV1 {
@@ -25,6 +27,18 @@ public class ArchPackageControllerV1 {
 
     public ArchPackageControllerV1(ArchPackageService archPackageService) {
         this.archPackageService = archPackageService;
+    }
+
+    @GetMapping("/{packageName}")
+    public ResponseEntity<?> getArchPackageByName(@PathVariable String packageName) {
+        return ResponseEntity.ok(archPackageService.getArchPackageByPackageName(packageName));
+    }
+
+    @GetMapping("/search")
+    public ResponseEntity<List<ArchPackage>> searchArchPackagesBySimilarity(
+            @RequestParam @NotNull @NotEmpty String keyword,
+            @RequestParam(defaultValue = "10") @Min(1) @Max(50) int limit) {
+        return ResponseEntity.ok(archPackageService.searchArchPackagesBySimilarity(keyword, limit));
     }
 
     @GetMapping("")
@@ -65,17 +79,5 @@ public class ArchPackageControllerV1 {
         response.put("totalPages", archPackagePage.getTotalPages());
 
         return ResponseEntity.ok(response);
-    }
-
-    @GetMapping("/{packageName}")
-    public ResponseEntity<?> getArchPackageByName(@PathVariable String packageName) {
-        return ResponseEntity.ok(archPackageService.getArchPackageByPackageName(packageName));
-    }
-
-    @GetMapping("/search")
-    public ResponseEntity<List<ArchPackage>> searchArchPackagesBySimilarity(
-            @RequestParam @NotNull @NotEmpty String keyword,
-            @RequestParam(defaultValue = "10") @Min(1) @Max(50) int limit) {
-        return ResponseEntity.ok(archPackageService.searchArchPackagesBySimilarity(keyword, limit));
     }
 }
