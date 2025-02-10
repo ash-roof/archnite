@@ -8,6 +8,19 @@ import java.time.OffsetDateTime;
 @Entity
 @Table(name = "aur_packages")
 public class AurPackage {
+
+    public AurPackage() {
+
+    }
+
+    public AurPackage(Integer id, String packageName, String description, OffsetDateTime lastUpdate, String url) {
+        this.id = id;
+        this.packageName = packageName;
+        this.description = description;
+        this.lastUpdate = lastUpdate;
+        this.url = url;
+    }
+
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "aur_packages_id_gen")
     @SequenceGenerator(name = "aur_packages_id_gen", sequenceName = "aur_packages_id_seq", allocationSize = 1)

@@ -13,6 +13,15 @@ public class ArchPackage {
     public ArchPackage() {
     }
 
+    public ArchPackage(Integer id, String architecture, String packageName, String description, OffsetDateTime lastUpdate, String url) {
+        this.id = id;
+        this.architecture = architecture;
+        this.packageName = packageName;
+        this.description = description;
+        this.lastUpdate = lastUpdate;
+        this.url = url;
+    }
+
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "arch_packages_id_gen")
     @SequenceGenerator(name = "arch_packages_id_gen", sequenceName = "arch_packages_id_seq", allocationSize = 1)
