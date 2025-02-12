@@ -23,9 +23,9 @@ public interface ArchPackageRepository extends JpaRepository<ArchPackage, Intege
             length(package_name)
         LIMIT :limit;
     """, nativeQuery = true)
-    List<ArchPackage> searchArchPackagesBySimilarity(@Param("keyword") String keyword, @Param("limit") int limit);
+    List<ArchPackage> searchPackagesByName(@Param("keyword") String keyword, @Param("limit") int limit);
 
-    ArchPackage getArchPackageByPackageName(String packageName);
+    ArchPackage findByPackageName(String packageName);
 
     Page<ArchPackage> findAll(Pageable paging);
 }

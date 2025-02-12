@@ -23,9 +23,9 @@ public interface AurPackageRepository extends JpaRepository<AurPackage, Integer>
             length(package_name)
         LIMIT :limit;
     """, nativeQuery = true)
-    List<AurPackage> searchAurPackagesBySimilarity(@Param("keyword") String keyword, @Param("limit") int limit);
+    List<AurPackage> searchPackagesByName(@Param("keyword") String keyword, @Param("limit") int limit);
 
-    AurPackage getAurPackageByPackageName(String packageName);
+    AurPackage findByPackageName(String packageName);
 
     Page<AurPackage> findAll(Pageable paging);
 }
