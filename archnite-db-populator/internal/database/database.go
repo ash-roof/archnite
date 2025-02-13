@@ -43,7 +43,7 @@ func UpdatePackages(ctx context.Context, pool *pgxpool.Pool, archPkgs []models.A
 	}
 	defer tx.Rollback(ctx)
 
-	if _, err = tx.Exec(ctx, "TRUNCATE TABLE packages"); err != nil {
+	if _, err = tx.Exec(ctx, "TRUNCATE TABLE packages RESTART IDENTITY"); err != nil {
 		return fmt.Errorf("failed to truncate table: %w", err)
 	}
 

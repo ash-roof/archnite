@@ -32,7 +32,7 @@ func main() {
 		log.Fatalf("Initial update failed: %v", err)
 	}
 
-	ticker := time.NewTicker(3 * time.Minute)
+	ticker := time.NewTicker(6 * time.Hour)
 	defer ticker.Stop()
 
 	for range ticker.C {

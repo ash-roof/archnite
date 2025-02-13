@@ -7,7 +7,7 @@ import lombok.*;
 import java.time.OffsetDateTime;
 
 @Entity
-@Table(name = "arch_packages")
+@Table(name = "packages")
 @NoArgsConstructor
 @AllArgsConstructor
 @Getter
@@ -15,8 +15,8 @@ import java.time.OffsetDateTime;
 @ToString
 public class ArchPackage {
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "arch_packages_id_gen")
-    @SequenceGenerator(name = "arch_packages_id_gen", sequenceName = "arch_packages_id_seq", allocationSize = 1)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "packages_id_gen")
+    @SequenceGenerator(name = "packages_id_gen", sequenceName = "packages_id_seq", allocationSize = 1)
     @Column(name = "id", nullable = false)
     private Integer id;
 
@@ -33,6 +33,9 @@ public class ArchPackage {
     @Column(name = "last_update", nullable = false)
     private OffsetDateTime lastUpdate;
 
-    @Column(name = "url", length = Integer.MAX_VALUE)
+    @Column(name = "url", length = Integer.MAX_VALUE, nullable = false)
     private String url;
+
+    @Column(name = "is_aur", nullable = false)
+    private boolean isAur;
 }
