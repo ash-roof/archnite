@@ -21,6 +21,5 @@ go.work.sum
 # env file
 .env
 
-archnite-db-populator
-ArchPackages.txt
-internal/aur/pkgdump.json
+bin/populator
+pkgdump.json

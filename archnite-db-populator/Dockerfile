@@ -9,19 +9,15 @@ RUN go mod download
 
 COPY . .
 
-RUN CGO_ENABLED=0 GOOS=linux go build -o archnite-db-populator .
-
-FROM builder AS tester
-RUN go test -v ./...
+RUN CGO_ENABLED=0 GOOS=linux go build -o bin/populator ./cmd/populator
 
 FROM alpine:3.20 AS final
 
 WORKDIR /app
 
-COPY --from=builder /app/archnite-db-populator .
+COPY --from=builder /app/bin/populator .
 
-COPY --from=builder /app/internal/arch/arch_packages.sql ./internal/arch/arch_packages.sql
-COPY --from=builder /app/internal/aur/aur_packages.sql ./internal/aur/aur_packages.sql
+COPY --from=builder /app/internal/database/migrations/schema.sql ./internal/database/migrations/schema.sql
 
 ARG UID=10001
 RUN adduser \
@@ -33,8 +29,8 @@ RUN adduser \
     --uid "${UID}" \
     appuser
 
-RUN chown -R appuser:appuser /app && chmod +x /app/archnite-db-populator
+RUN chown -R appuser:appuser /app && chmod +x /app/bin/populator
 
 USER appuser
 
-CMD ["./archnite-db-populator"]
+CMD ["./bin/populator"]
