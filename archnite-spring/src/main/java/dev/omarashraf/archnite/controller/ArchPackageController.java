@@ -1,9 +1,12 @@
 package dev.omarashraf.archnite.controller;
 
+import dev.omarashraf.archnite.exception.PackageNotFoundException;
 import dev.omarashraf.archnite.model.ArchPackage;
 import dev.omarashraf.archnite.service.ArchPackageService;
 import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;
+import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.NotNull;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -25,21 +28,32 @@ public class ArchPackageController {
         this.archPackageService = archPackageService;
     }
 
-    @GetMapping("/{packageName}")
-    public ResponseEntity<?> findPackageByName(@PathVariable String packageName, @RequestParam Boolean isAur) {
-        return ResponseEntity.ok(archPackageService.findArchPackageByPackageName(packageName, isAur));
+    @GetMapping("/name/{packageName}")
+    public ResponseEntity<?> findPackageByName(@PathVariable String packageName, @RequestParam(required = false) Boolean isAur) {
+        ArchPackage archPackage = archPackageService.findArchPackageByPackageName(packageName, isAur)
+                .orElseThrow(() -> new PackageNotFoundException("Package Not Found", packageName));
+        return ResponseEntity.ok(archPackage);
+    }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<?> findPackageById(@PathVariable Integer id) {
+        ArchPackage archPackage = archPackageService.findArchPackageById(id)
+                .orElseThrow(() -> new PackageNotFoundException("Package Not Found", id));
+        return ResponseEntity.ok(archPackage);
     }
 
     @GetMapping("/search")
-    public ResponseEntity<List<ArchPackage>> searchPackagesByName(@RequestParam String keyword,
-                                                                  @RequestParam int limit,
-                                                                  @RequestParam Boolean isAur) {
+    public ResponseEntity<List<ArchPackage>> searchPackagesByName(@RequestParam @NotEmpty @NotNull String keyword,
+                                                                  @RequestParam(defaultValue = "10", required = false)
+                                                                  @Min(1) @Max(50) Integer limit,
+                                                                  @RequestParam(required = false) Boolean isAur) {
         return ResponseEntity.ok(archPackageService.searchPackagesByName(keyword, limit, isAur));
     }
 
     @GetMapping("")
-    public ResponseEntity<Map<String, Object>> getAll(@RequestParam(defaultValue = "0") @Min(0) int page,
-                                                      @RequestParam(defaultValue = "50") @Min(5) @Max(150) int size,
+    public ResponseEntity<Map<String, Object>> getAll(@RequestParam(defaultValue = "0", required = false) @Min(0) Integer page,
+                                                      @RequestParam(defaultValue = "50", required = false)
+                                                      @Min(5) @Max(150) Integer size,
                                                       @RequestParam(required = false) Boolean isAur) {
 
         Pageable paging = PageRequest.of(page, size);

@@ -32,5 +32,9 @@ public interface ArchPackageRepository extends JpaRepository<ArchPackage, Intege
 
     Optional<ArchPackage> findArchPackageByPackageNameAndIsAur(String packageName, Boolean isAur);
 
+    Optional<ArchPackage> getArchPackageByPackageName(String packageName);
+
+    Optional<ArchPackage> getArchPackageById(Integer id);
+
     Page<ArchPackage> getAllByIsAur(Pageable pageable, Boolean isAur);
 }

@@ -18,7 +18,14 @@ public class ArchPackageService {
     }
 
     public Optional<ArchPackage> findArchPackageByPackageName(String packageName, Boolean isAur) {
+        if(isAur == null) {
+            return archPackageRepository.getArchPackageByPackageName(packageName);
+        }
         return archPackageRepository.findArchPackageByPackageNameAndIsAur(packageName, isAur);
+    }
+
+    public Optional<ArchPackage> findArchPackageById(Integer id) {
+            return archPackageRepository.getArchPackageById(id);
     }
 
     public List<ArchPackage> searchPackagesByName(String keyword, int limit, Boolean isAur) {
