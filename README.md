@@ -19,7 +19,6 @@ as the AUR using pacman or your preferred AUR helper.
         - [Docker](#2-docker)
         - [Manual Setup](#3-manual-setup)
 3. [Contributing](#contributing)
-4. [Roadmap](#roadmap)
 
 ## About The Project
 
@@ -38,6 +37,11 @@ desired packages and get an install command I could paste into my terminal.
 I also started the project with the purpose of it being a learning experience
 so I could try out some technologies I've always wanted to experiment with.
 
+Finally, I wanted to make a unified API for Arch official and AUR packages that is
+relatively fast (or at least faster than the Arch official packages JSON API,
+which I found pretty slow in my experience) that anyone can use and hopefully
+find a purpose for.
+
 ### Architecture & Tech Stack
 
 archnite was built using the following technologies:
@@ -54,7 +58,7 @@ archnite was built using the following technologies:
   fast package lookup, allowing for incremental search in our client.
 - Angular
 - Docker & Docker Compose
-  - Fully containerised the app with a provided docker-compose.yml file
+  - Fully containerized the app with a provided docker-compose.yml file
   to easily spin up all project services.
 
 #### Why Go & Spring Boot?
@@ -234,14 +238,14 @@ go mod tidy
 then run:
 
 ```bash
-go build
-./archnite-db-populator
+go build -o bin/populator ./cmd/populator
+./bin/populator
 ```
 
 or just run [main.go](./archnite-db-populator/main.go)
 
 ```bash
-go run ./main.go
+go run ./cmd/populator/main.go
 ```
 
 ##### Spring Boot project (archnite-spring)
@@ -281,25 +285,3 @@ these technologies, so feel free to open issues & discussion,
 suggest improvements, features or bug fixes. Any contribution
 is welcome and I'd love to learn from anyone more
 experienced with any part of this stack.
-
-### Contribution Guide
-
-1. Fork the repo
-2. Clone the fork and create a new branch
-
-    ```bash
-    git clone https://github.com/your-username/archnite.git
-    cd archnite
-    git checkout -b feature-or-bugfix-name
-    ```
-
-3. Make your changes and run the tests for the project(s)
-you changed (go to [Running The Project](#running-the-project)
-for more details).
-
-4. Commit and push to your fork
-
-    ```bash
-    git commit -m "Added x / Fixed y"
-    git push origin feature-or-bugfix-name
-    ```
