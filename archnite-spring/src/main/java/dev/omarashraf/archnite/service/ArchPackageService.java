@@ -19,9 +19,9 @@ public class ArchPackageService {
 
     public Optional<ArchPackage> findArchPackageByPackageName(String packageName, Boolean isAur) {
         if(isAur == null) {
-            return archPackageRepository.getArchPackageByPackageName(packageName);
+            return archPackageRepository.getArchPackageByPackageName(packageName.toLowerCase());
         }
-        return archPackageRepository.findArchPackageByPackageNameAndIsAur(packageName, isAur);
+        return archPackageRepository.findArchPackageByPackageNameAndIsAur(packageName.toLowerCase(), isAur);
     }
 
     public Optional<ArchPackage> findArchPackageById(Integer id) {
@@ -30,7 +30,7 @@ public class ArchPackageService {
 
     public List<ArchPackage> searchPackagesByName(String keyword, int limit, Boolean isAur) {
         keyword = keyword.replace(" ", "-");
-        return archPackageRepository.searchPackagesByName(keyword, limit, isAur);
+        return archPackageRepository.searchPackagesByName(keyword.toLowerCase(), limit, isAur);
     }
 
     public Page<ArchPackage> getAll(Pageable paging, Boolean isAur) {

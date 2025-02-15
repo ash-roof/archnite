@@ -8,6 +8,7 @@ import org.springframework.web.bind.MissingServletRequestParameterException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
+import org.springframework.web.servlet.NoHandlerFoundException;
 import org.springframework.web.servlet.resource.NoResourceFoundException;
 
 import java.time.LocalDateTime;
@@ -62,6 +63,13 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(NoResourceFoundException.class)
     public ResponseEntity<?> handleNoResourceFoundException(NoResourceFoundException ex) {
         String details = "The requested endpoint '" + ex.getResourcePath() + "' does not exist.";
+        ErrorResponse response = new ErrorResponse(LocalDateTime.now(), details, "Not Found");
+        return new ResponseEntity<>(response, HttpStatus.NOT_FOUND);
+    }
+
+    @ExceptionHandler(NoHandlerFoundException.class)
+    public ResponseEntity<?> handleNoHandlerFoundException(NoHandlerFoundException ex) {
+        String details = "The requested endpoint GET'" + ex.getRequestURL() + "' does not exist.";
         ErrorResponse response = new ErrorResponse(LocalDateTime.now(), details, "Not Found");
         return new ResponseEntity<>(response, HttpStatus.NOT_FOUND);
     }

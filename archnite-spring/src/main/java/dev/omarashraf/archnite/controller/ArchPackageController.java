@@ -29,14 +29,14 @@ public class ArchPackageController {
     }
 
     @GetMapping("/name/{packageName}")
-    public ResponseEntity<?> findPackageByName(@PathVariable String packageName, @RequestParam(required = false) Boolean isAur) {
+    public ResponseEntity<?> getPackageByName(@PathVariable String packageName, @RequestParam(required = false) Boolean isAur) {
         ArchPackage archPackage = archPackageService.findArchPackageByPackageName(packageName, isAur)
                 .orElseThrow(() -> new PackageNotFoundException("Package Not Found", packageName));
         return ResponseEntity.ok(archPackage);
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<?> findPackageById(@PathVariable Integer id) {
+    public ResponseEntity<?> getPackageById(@PathVariable Integer id) {
         ArchPackage archPackage = archPackageService.findArchPackageById(id)
                 .orElseThrow(() -> new PackageNotFoundException("Package Not Found", id));
         return ResponseEntity.ok(archPackage);
