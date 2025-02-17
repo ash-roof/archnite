@@ -1,5 +1,6 @@
 package dev.omarashraf.archnite.controller;
 
+import dev.omarashraf.archnite.enums.SortField;
 import dev.omarashraf.archnite.exception.PackageNotFoundException;
 import dev.omarashraf.archnite.model.ArchPackage;
 import dev.omarashraf.archnite.service.ArchPackageService;
@@ -10,6 +11,7 @@ import jakarta.validation.constraints.NotNull;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
@@ -54,10 +56,28 @@ public class ArchPackageController {
     public ResponseEntity<Map<String, Object>> getAll(@RequestParam(defaultValue = "0", required = false) @Min(0) Integer page,
                                                       @RequestParam(defaultValue = "50", required = false)
                                                       @Min(5) @Max(150) Integer size,
-                                                      @RequestParam(required = false) Boolean isAur) {
+                                                      @RequestParam(required = false) Boolean aur,
+                                                      @RequestParam(required = false, defaultValue = "ASC")
+                                                          Sort.Direction order,
+                                                      @RequestParam(required = false, defaultValue = "PACKAGENAME")
+                                                          SortField sort) {
 
-        Pageable paging = PageRequest.of(page, size);
-        Page<ArchPackage> archPackagePage = archPackageService.getAll(paging, isAur);
+        String correctedSort;
+        if (String.valueOf(sort).equalsIgnoreCase("packageName")) {
+            correctedSort = "packageName";
+        } else {
+            correctedSort = "lastUpdate";
+        }
+
+        if (String.valueOf(order).equalsIgnoreCase("asc")) {
+            order = Sort.Direction.ASC;
+        } else {
+            order = Sort.Direction.DESC;
+        }
+
+        Sort sortBy = Sort.by(order, correctedSort);
+        Pageable paging = PageRequest.of(page, size, sortBy);
+        Page<ArchPackage> archPackagePage = archPackageService.getAll(paging, aur);
         List<ArchPackage> packages = archPackagePage.getContent();
 
         Map<String, Object> response = new HashMap<>();
