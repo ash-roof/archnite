@@ -12,6 +12,7 @@ import org.springframework.web.servlet.NoHandlerFoundException;
 import org.springframework.web.servlet.resource.NoResourceFoundException;
 
 import java.time.LocalDateTime;
+import java.util.Arrays;
 import java.util.Map;
 import java.util.stream.Collectors;
 
@@ -23,7 +24,7 @@ public class GlobalExceptionHandler {
         Object identifier = ex.getMissingPackageIdentifier();
 
         if (identifier instanceof String) {
-           details = "Package with name: '" + identifier + "' not found";
+            details = "Package with name: '" + identifier + "' not found";
         } else {
             details = "Package with id: " + identifier + " not found";
         }
@@ -50,13 +51,42 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(MethodArgumentTypeMismatchException.class)
     public ResponseEntity<?> handleMethodArgumentTypeMismatchException(MethodArgumentTypeMismatchException ex) {
         String parameterName = ex.getName();
-        String expectedType = (ex.getRequiredType() != null) ? ex.getRequiredType().getSimpleName() : "unknown";
-        String providedValue = (ex.getValue() != null) ? ex.getValue().toString() : "null";
+        String providedValue = ex.getValue() != null ? ex.getValue().toString() : "null";
+        Class<?> requiredType = ex.getRequiredType();
 
-        String details = String.format("Parameter '%s' must be of type %s. Provided value: '%s'.",
-                parameterName, expectedType, providedValue);
+        String details;
 
-        ErrorResponse response = new ErrorResponse(LocalDateTime.now(), details, "Bad Request");
+        if (requiredType != null && requiredType.isEnum()) {
+            Object[] enumConstants = requiredType.getEnumConstants();
+            String allowedValues = Arrays.stream(enumConstants)
+                    .map(Object::toString)
+                    .collect(Collectors.joining(", "));
+
+            details = String.format(
+                    "Invalid value '%s' for parameter '%s'. Allowed values are: %s (case-insensitive)",
+                    providedValue,
+                    parameterName,
+                    allowedValues
+            );
+        } else {
+            // Default message for non-enum types
+            String expectedType = requiredType != null ?
+                    requiredType.getSimpleName() : "unknown";
+
+            details = String.format(
+                    "Parameter '%s' must be of type %s. Provided value: '%s'",
+                    parameterName,
+                    expectedType,
+                    providedValue
+            );
+        }
+
+        ErrorResponse response = new ErrorResponse(
+                LocalDateTime.now(),
+                details,
+                "Bad Request"
+        );
+
         return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
     }
 
@@ -76,7 +106,7 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(MissingServletRequestParameterException.class)
     public ResponseEntity<?> handleMissingRequestParameterException(MissingServletRequestParameterException ex) {
-        String details = "Required request parameter '" + ex.getParameterName() +"' is not present";
+        String details = "Required request parameter '" + ex.getParameterName() + "' is not present";
         ErrorResponse response = new ErrorResponse(LocalDateTime.now(), details, "Bad Request");
         return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
     }
