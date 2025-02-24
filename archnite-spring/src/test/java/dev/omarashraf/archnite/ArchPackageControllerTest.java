@@ -56,7 +56,7 @@ public class ArchPackageControllerTest {
     }
 
     @Test
-    void GetPackageByName_WhenPackageExists_WithoutIsAurQueryParam_ReturnsPackage() throws Exception {
+    void getPackageByName_WhenPackageExists_WithoutIsAurQueryParam_ReturnsPackage() throws Exception {
         String correctPackageName = "testpkg";
         ArchPackage archPackage = createTestPackage(1, correctPackageName, false);
         when(archPackageService.findArchPackageByPackageName(correctPackageName, null))
@@ -66,7 +66,7 @@ public class ArchPackageControllerTest {
     }
 
     @Test
-    void GetPackageByName_WhenPackageExists_WithIsAurQueryParam_ReturnsPackage() throws Exception {
+    void getPackageByName_WhenPackageExists_WithIsAurQueryParam_ReturnsPackage() throws Exception {
         String correctPackageName = "testpkg";
         ArchPackage archPackage = createTestPackage(1, correctPackageName, false);
         when(archPackageService.findArchPackageByPackageName(correctPackageName, false))
@@ -76,7 +76,7 @@ public class ArchPackageControllerTest {
     }
 
     @Test
-    void GetPackageByName_WhenIsAurIsInvalid_Returns400() throws Exception {
+    void getPackageByName_WhenIsAurIsInvalid_Returns400() throws Exception {
         String packageName = "testpkg";
 
         mockMvc.perform(get(requestMapping + "/name/" + packageName + "?isAur=invalid"))
@@ -87,7 +87,7 @@ public class ArchPackageControllerTest {
     }
 
     @Test
-    void GetPackageByName_WithIsAurQueryParam_ReturnsCorrectAurPackage() throws Exception {
+    void getPackageByName_WithIsAurQueryParam_ReturnsCorrectAurPackage() throws Exception {
         String packageName = "testpkg";
 
         ArchPackage aurPackage = createTestPackage(1, packageName, true);
@@ -103,7 +103,7 @@ public class ArchPackageControllerTest {
     }
 
     @Test
-    void GetPackageByName_WhenPackageDoesNotExist_WithoutIsAurQueryParam_Returns404() throws Exception {
+    void getPackageByName_WhenPackageDoesNotExist_WithoutIsAurQueryParam_Returns404() throws Exception {
         String missingPackageName = "missing";
         String errorMessage = "Package Not Found";
         String errorDetails = "Package with name: '" + missingPackageName + "' not found";
@@ -117,7 +117,7 @@ public class ArchPackageControllerTest {
     }
 
     @Test
-    void GetPackageByName_WhenPackageDoesNotExist_WithIsAurQueryParam_Returns404() throws Exception {
+    void getPackageByName_WhenPackageDoesNotExist_WithIsAurQueryParam_Returns404() throws Exception {
         String missingPackageName = "missing";
         String errorMessage = "Package Not Found";
         String errorDetails = "Package with name: '" + missingPackageName + "' not found";
@@ -131,13 +131,13 @@ public class ArchPackageControllerTest {
     }
 
     @Test
-    void GetPackageByName_WhenPackageNameIsMissing_Returns404() throws Exception {
+    void getPackageByName_WhenPackageNameIsMissing_Returns404() throws Exception {
         mockMvc.perform(get(requestMapping + "/name/"))
                 .andExpect(status().isNotFound());
     }
 
     @Test
-    void GetPackageByName_WithDifferentCase_ReturnsPackage() throws Exception {
+    void getPackageByName_WithDifferentCase_ReturnsPackage() throws Exception {
         String packageName = "TestPkg";
         ArchPackage archPackage = createTestPackage(1, "testpkg", false);
 
@@ -145,6 +145,40 @@ public class ArchPackageControllerTest {
                 .thenReturn(Optional.of(archPackage));
 
         assertPackageJson(mockMvc.perform(get(requestMapping + "/name/TestPkg?isAur=false")), archPackage);
+    }
+
+    @Test
+    void getPackageById_ReturnsCorrectPackage() throws Exception {
+        String packageName = "testPkg";
+        int packageId = 1;
+        ArchPackage archPackage = createTestPackage(packageId, packageName, false);
+
+        when(archPackageService.findArchPackageById(1)).thenReturn(Optional.of(archPackage));
+
+        assertPackageJson(mockMvc.perform(get(requestMapping + "/" + packageId)), archPackage);
+    }
+
+    @Test
+    void getPackageById_WithNonExistentId_Returns404() throws Exception {
+        int missingId = 1;
+        String errorMessage = "Package Not Found";
+        String errorDetails = "Package with id: " + missingId + " not found";
+
+        when(archPackageService.findArchPackageById(missingId))
+                .thenThrow(new PackageNotFoundException(errorMessage, missingId));
+
+        assertNotFoundJson(mockMvc.perform(get(requestMapping + "/" + missingId)), errorDetails, errorMessage);
+    }
+
+    @Test
+    void getPackageById_WithInvalidIdType_Returns400() throws Exception {
+        String invalidId = "invalid";
+
+        mockMvc.perform(get(requestMapping + "/" + invalidId))
+                .andExpect(status().isBadRequest())
+                .andExpect(jsonPath("$.message").value("Bad Request"))
+                .andExpect(jsonPath("$.details").exists())
+                .andExpect(jsonPath("$.timestamp").exists());
     }
 
     private void assertPackageJson(ResultActions result, ArchPackage archPackage) throws Exception {
