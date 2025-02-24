@@ -4,10 +4,7 @@ import dev.omarashraf.archnite.enums.SortField;
 import dev.omarashraf.archnite.exception.PackageNotFoundException;
 import dev.omarashraf.archnite.model.ArchPackage;
 import dev.omarashraf.archnite.service.ArchPackageService;
-import jakarta.validation.constraints.Max;
-import jakarta.validation.constraints.Min;
-import jakarta.validation.constraints.NotEmpty;
-import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.*;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -31,8 +28,8 @@ public class ArchPackageController {
     }
 
     @GetMapping("/name/{packageName}")
-    public ResponseEntity<?> getPackageByName(@PathVariable String packageName, @RequestParam(required = false) Boolean isAur) {
-        ArchPackage archPackage = archPackageService.findArchPackageByPackageName(packageName, isAur)
+    public ResponseEntity<?> getPackageByName(@PathVariable String packageName, @RequestParam(required = false) Boolean aur) {
+        ArchPackage archPackage = archPackageService.findArchPackageByPackageName(packageName, aur)
                 .orElseThrow(() -> new PackageNotFoundException("Package Not Found", packageName));
         return ResponseEntity.ok(archPackage);
     }
@@ -45,11 +42,11 @@ public class ArchPackageController {
     }
 
     @GetMapping("/search")
-    public ResponseEntity<List<ArchPackage>> searchPackagesByName(@RequestParam @NotEmpty @NotNull String keyword,
+    public ResponseEntity<List<ArchPackage>> searchPackagesByName(@RequestParam @NotBlank @NotEmpty @NotNull String keyword,
                                                                   @RequestParam(defaultValue = "10", required = false)
                                                                   @Min(1) @Max(50) Integer limit,
-                                                                  @RequestParam(required = false) Boolean isAur) {
-        return ResponseEntity.ok(archPackageService.searchPackagesByName(keyword, limit, isAur));
+                                                                  @RequestParam(required = false) Boolean aur) {
+        return ResponseEntity.ok(archPackageService.searchPackagesByName(keyword, limit, aur));
     }
 
     @GetMapping("")
