@@ -1,9 +1,7 @@
 # archnite
 
-archnite is a full stack web app to help users of both Arch Linux and
-Arch-based distros quickly generate package install commands
-for their favorite packages from the Arch official repos as well
-as the AUR using pacman or your preferred AUR helper.
+archnite is public API for Arch Linux and AUR packages with an accompanying
+client for browsing packages and generating long package install commands.
 
 ## Table of Contents
 
