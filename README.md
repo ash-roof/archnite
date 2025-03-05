@@ -32,10 +32,7 @@ a autocomplete/incremental search box similar to what a search engine has,
 and/or pick from a list of popular packages, select my
 desired packages and get an install command I could paste into my terminal.
 
-I also started the project with the purpose of it being a learning experience
-so I could try out some technologies I've always wanted to experiment with.
-
-Finally, I wanted to make a unified API for Arch official and AUR packages that is
+I also wanted to make a unified API for Arch official and AUR packages that is
 relatively fast (or at least faster than the Arch official packages JSON API,
 which I found pretty slow in my experience) that anyone can use and hopefully
 find a purpose for.
@@ -57,18 +54,15 @@ archnite was built using the following technologies:
 - Angular
 - Docker & Docker Compose
   - Fully containerized the app with a provided docker-compose.yml file
-  to easily spin up all project services.
+  to easily spin up all services.
 
 #### Why Go & Spring Boot?
 
-To be honest, this project would have been perfectly fine and probably better
-off with just Go or Spring Boot, but as I said this is mainly a learning-based
-endeavor and these are the technologies I wanted to try out and get
-experience with (especially Go).
+To be honest, this project would have been perfectly fine with just Go or
+Spring Boot, but these are the technologies I wanted to get experience with.
 
 That being said, I do like the stack I chose and I feel each technology fits
-its use case well and gives a good foundation for expanding the app,
-even if it's not optimal.
+its use case well and gives a good foundation for expanding the app.
 
 ## Getting Started
 
@@ -278,8 +272,6 @@ For unit tests:
 ## Contributing
 
 This is my first open-source project, so I'll try to keep things simple
-and flexible for the time being. This is a learning exercise for me with
-these technologies, so feel free to open issues & discussion,
+and flexible for the time being. Feel free to open issues & discussions,
 suggest improvements, features or bug fixes. Any contribution
-is welcome and I'd love to learn from anyone more
-experienced with any part of this stack.
+is welcome and I'd love to learn new things about any part of this stack.
