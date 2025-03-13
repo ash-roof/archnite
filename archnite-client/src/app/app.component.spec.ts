@@ -14,10 +14,10 @@ describe('AppComponent', () => {
     expect(app).toBeTruthy();
   });
 
-  it(`should have the 'archnite-client' title`, () => {
+  it(`should have the 'archnite' title`, () => {
     const fixture = TestBed.createComponent(AppComponent);
     const app = fixture.componentInstance;
-    expect(app.title).toEqual('archnite-client');
+    expect(app.title).toEqual('archnite');
   });
 
   it('should render title', () => {
