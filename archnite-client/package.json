@@ -24,6 +24,7 @@
     "primeng": "^19.0.9",
     "rxjs": "~7.8.0",
     "tailwindcss": "^4.0.14",
+    "tailwindcss-primeui": "^0.5.1",
     "tslib": "^2.3.0",
     "zone.js": "~0.15.0"
   },
