@@ -51,7 +51,7 @@ archnite was built using the following technologies:
 - PostgreSQL
   - Used to store package metadata and apply a trigram index to package names for
   fast package lookup, allowing for incremental search in our client.
-- Angular 
+- Angular
 - Docker & Docker Compose
   - Fully containerized the app with a provided docker-compose.yml file
   to easily spin up all services.
