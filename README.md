@@ -51,7 +51,7 @@ archnite was built using the following technologies:
 - PostgreSQL
   - Used to store package metadata and apply a trigram index to package names for
   fast package lookup, allowing for incremental search in our client.
-- React
+- Angular 
 - Docker & Docker Compose
   - Fully containerized the app with a provided docker-compose.yml file
   to easily spin up all services.
@@ -78,7 +78,7 @@ cd archnite
 1. The easiest way is to run the entire service stack with Docker Compose using
 the provided [docker-compose.yml](./docker-compose.yml) file. This will spin up an
 instance of PostgreSQL, setup the app's database used by the Spring Boot
-and Go projects and start containers running the Go, Spring Boot & React projects.
+and Go projects and start containers running the Go, Spring Boot & Angular projects.
 
 2. Run the individual project containers using Docker and each project's Dockerfile.
 This method requires the manual setup of a PostgreSQL instance on
@@ -172,7 +172,7 @@ You can now find:
 
 - The Spring Boot project (archnite-spring) running on
 localhost:`SPRING_PORT` from your `.env`
-- The React client (archnite-client) running on
+- The Angular client (archnite-client) running on
 localhost:`CLIENT_PORT` from your `.env`
 - The Go project (archnite-db-populator) binary running
 
@@ -204,7 +204,7 @@ docker run --env-file ../.env --network="host" archnite-spring:latest
 
 You'll find the Spring Boot project running on localhost:`SPRING_PORT`
 
-##### For the React project (archnite-client)
+##### For the Angular project (archnite-client)
 
 ```bash
 cd archnite-client
@@ -212,7 +212,7 @@ docker build -t archnite-client .
 docker run --env-file ../.env --network="host" archnite-client:latest
 ```
 
-You'll find the React project running on localhost:`CLIENT_PORT`
+You'll find the Angular project running on localhost:`CLIENT_PORT`
 
 #### 3. Manual Setup
 
