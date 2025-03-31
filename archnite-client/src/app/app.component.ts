@@ -1,12 +1,29 @@
 import { Component } from '@angular/core';
-import { RouterOutlet } from '@angular/router';
+import { Title } from '@angular/platform-browser';
+import { ButtonModule } from 'primeng/button';
+import { FormsModule } from '@angular/forms';
+import { AutoCompleteModule } from 'primeng/autocomplete';
+
+interface AutoCompleteCompleteEvent {
+  originalEvent: Event;
+  query: string;
+}
 
 @Component({
   selector: 'app-root',
-  imports: [RouterOutlet],
+  imports: [ButtonModule, AutoCompleteModule, FormsModule],
   templateUrl: './app.component.html',
-  styleUrl: './app.component.css'
 })
 export class AppComponent {
-  title = 'archnite-client';
+  selectedPackages: string[];
+  suggestedPackages: string[];
+
+  constructor(private titleService: Title) {
+    this.titleService.setTitle("Archnite")
+    this.suggestedPackages = []
+    this.selectedPackages = []
+  }
+  search(event: AutoCompleteCompleteEvent) {
+    this.suggestedPackages = [...Array(10).keys()].map((item) => event.query + '-' + item);
+  }
 }
