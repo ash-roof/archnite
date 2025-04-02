@@ -42,7 +42,7 @@ export class AppComponent {
     });
   }
 
-  handleCopyClick(pkg: ArchPackage, event: Event) {
+  handleSuggestionLinkClick(pkg: ArchPackage, event: Event) {
     event.preventDefault();
     event.stopPropagation();
     window.open(pkg.url, '_blank');
