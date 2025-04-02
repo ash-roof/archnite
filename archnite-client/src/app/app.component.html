@@ -1,16 +1,37 @@
 <main class="flex flex-col items-center justify-center w-screen h-screen">
   <div class="w-4/5 h-4/5 max-h-full rounded-xl bg-zinc-950 shadow-[5px_5px_0px_0px_rgba(0,_0,_0,_0.5)] overflow-y-auto">
-    <div class="flex flex-col items-center">
-      <h1 class="text-4xl mb-6 mt-6 ">Archnite</h1>
-      <label for="multiple-ac-1" class="font-bold mb-2 block">Search Packages</label>
-      <p-autocomplete [(ngModel)]="selectedPackages"
-        class="w-3/5 mb-6"
-        inputId="multiple-ac-1"
-        multiple
-        fluid
-        [forceSelection]="true"
-        [suggestions]="suggestedPackages"
-        (completeMethod)="search($event)" />
+    <div class="flex flex-col items-center w-full">
+      <h1 class="text-4xl mb-6 mt-6">Archnite</h1>
+      <label for="multiple-ac" class="font-bold mb-2 block">Search Packages</label>
+      <div class="w-3/5 mb-6 flex justify-center">
+        <p-autocomplete [(ngModel)]="selectedPackages"
+          inputId="multiple-ac"
+          optionLabel="packageName"
+          class="w-full mr-2"
+          styleClass="w-full"
+          multiple
+          [suggestions]="suggestedPackages"
+          [forceSelection]="true"
+          (completeMethod)="search($event)" >
+          <ng-template let-pkg pTemplate="item">
+            <div class="flex items-center justify-between w-full">
+              <span>
+                {{ pkg.packageName }}
+                @if(pkg.aur) {
+                  <span class="text-sm text-gray-400"> (AUR)</span>
+                }
+              </span>
+              <a href="{{ pkg.url }}"
+                 target="_blank"
+                 (click)="handleCopyClick(pkg, $event)"
+                 class="ml-2 text-blue-400 hover:text-blue-300 hover:underline">
+                View
+              </a>
+            </div>
+          </ng-template>
+        </p-autocomplete>
+        <p-button (click)="copyToClipboard()" label="Copy" />
+      </div>
       <div class="flex flex-wrap gap-4">
         <div class="flex items-center">
           <p-radiobutton name="packageType" value="All" [(ngModel)]="packageType" inputId="allPackageTypes" />
