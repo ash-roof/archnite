@@ -1,15 +1,30 @@
 <main class="flex flex-col items-center justify-center w-screen h-screen">
-  <div class="w-4/5 h-4/5 rounded-2xl bg-zinc-950">
+  <div class="w-4/5 h-4/5 max-h-full rounded-xl bg-zinc-950 shadow-[5px_5px_0px_0px_rgba(0,_0,_0,_0.5)] overflow-y-auto">
     <div class="flex flex-col items-center">
-      <h1 class="text-4xl mb-6 mt-6">Archnite</h1>
+      <h1 class="text-4xl mb-6 mt-6 ">Archnite</h1>
       <label for="multiple-ac-1" class="font-bold mb-2 block">Search Packages</label>
       <p-autocomplete [(ngModel)]="selectedPackages"
-        class="w-2/5"
+        class="w-3/5 mb-6"
         inputId="multiple-ac-1"
         multiple
         fluid
+        [forceSelection]="true"
         [suggestions]="suggestedPackages"
         (completeMethod)="search($event)" />
+      <div class="flex flex-wrap gap-4">
+        <div class="flex items-center">
+          <p-radiobutton name="packageType" value="All" [(ngModel)]="packageType" inputId="allPackageTypes" />
+          <label for="allPackageTypes" class="ml-2">All</label>
+        </div>
+        <div class="flex items-center">
+          <p-radiobutton name="packageType" value="Official" [(ngModel)]="packageType" inputId="officialOnly" />
+          <label for="officialOnly" class="ml-2">Official Packages Only</label>
+        </div>
+        <div class="flex items-center">
+          <p-radiobutton name="packageType" value="Aur" [(ngModel)]="packageType" inputId="aurOnly" />
+          <label for="aurOnly" class="ml-2">AUR Packages Only</label>
+        </div>
+      </div>
     </div>
   </div>
 </main>
