@@ -43,18 +43,18 @@ archnite was built using the following technologies:
 
 - Spring Boot
   - Used to create the JSON API responsible for querying the
-  database for package metadata.
+      database for package metadata.
 - Go
   - Used to build the DB Populator standalone binary which automatically fetches
-  updated package metadata, serializes it and populates the necessary
-  PostgreSQL tables.
+      updated package metadata, serializes it and populates the necessary
+      PostgreSQL tables.
 - PostgreSQL
   - Used to store package metadata and apply a trigram index to package names for
-  fast package lookup, allowing for incremental search in our client.
+      fast package lookup, allowing for incremental search in our client.
 - Angular
 - Docker & Docker Compose
   - Fully containerized the app with a provided docker-compose.yml file
-  to easily spin up all services.
+      to easily spin up all services.
 
 #### Why Go & Spring Boot?
 
@@ -76,17 +76,17 @@ cd archnite
 **There are three ways you can run this project:**
 
 1. The easiest way is to run the entire service stack with Docker Compose using
-the provided [docker-compose.yml](./docker-compose.yml) file. This will spin up an
-instance of PostgreSQL, setup the app's database used by the Spring Boot
-and Go projects and start containers running the Go, Spring Boot & Angular projects.
+   the provided [docker-compose.yml](./docker-compose.yml) file. This will spin up an
+   instance of PostgreSQL, setup the app's database used by the Spring Boot
+   and Go projects and start containers running the Go, Spring Boot & Angular projects.
 
 2. Run the individual project containers using Docker and each project's Dockerfile.
-This method requires the manual setup of a PostgreSQL instance on
-your machine and the creation of an empty database within this instance.
+   This method requires the manual setup of a PostgreSQL instance on
+   your machine and the creation of an empty database within this instance.
 
 3. Run the individual projects locally using each project's needed dependencies
-installed on your machine. This method also requires a running
-PostgreSQL instance with an empty database.
+   installed on your machine. This method also requires a running
+   PostgreSQL instance with an empty database.
 
 For the rest of the [Getting Started](#getting-started) section,
 these numbers will be used to reference each method
@@ -100,7 +100,7 @@ needed by archnite. A [.env.example](./.env.example) file
 has been created for this purpose:
 
 1. Create a copy of the `.env.example` file named `.env`
-in the root of the archnite repo.
+   in the root of the archnite repo.
 
     You can use the following command for this on macOS, Linux or WSL
     (or any Unix-like environment/shell):
@@ -126,8 +126,8 @@ docker run --name archnite-postgres \
 ```
 
 Replace the first `5432` with any other port if you don't want
-to use `5432` on your local machine (*just make sure to reflect
-this change on `POSTGRES_PORT` in `.env`*).
+to use `5432` on your local machine (_just make sure to reflect
+this change on `POSTGRES_PORT` in `.env`_).
 
 This will create a PostgreSQL container named `archnite-postgres`
 which contains an empty database, created using the environment
@@ -171,9 +171,9 @@ You can optionally add the `-d` flag to run in detached mode.
 You can now find:
 
 - The Spring Boot project (archnite-spring) running on
-localhost:`SPRING_PORT` from your `.env`
+  localhost:`SPRING_PORT` from your `.env`
 - The Angular client (archnite-client) running on
-localhost:`CLIENT_PORT` from your `.env`
+  localhost:`CLIENT_PORT` from your `.env`
 - The Go project (archnite-db-populator) binary running
 
 Stop and remove the containers using:
