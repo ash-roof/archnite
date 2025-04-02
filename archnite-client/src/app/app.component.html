@@ -23,14 +23,14 @@
               </span>
               <a href="{{ pkg.url }}"
                  target="_blank"
-                 (click)="handleCopyClick(pkg, $event)"
+                 (click)="handleSuggestionLinkClick(pkg, $event)"
                  class="ml-2 text-blue-400 hover:text-blue-300 hover:underline">
                 View
               </a>
             </div>
           </ng-template>
         </p-autocomplete>
-        <p-button (click)="copyToClipboard()" label="Copy" />
+        <p-button (click)="copyToClipboard()" label="Copy" [disabled]="selectedPackages.length === 0" />
       </div>
       <div class="flex flex-wrap gap-4">
         <div class="flex items-center">
