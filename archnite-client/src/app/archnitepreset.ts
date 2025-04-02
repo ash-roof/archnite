@@ -21,8 +21,8 @@ const ArchnitePreset = definePreset(Aura, {
         primary: {
           color: '{zinc.50}',
           inverseColor: '{zinc.950}',
-          hoverColor: '{zinc.100}',
-          activeColor: '{zinc.200}'
+          hoverColor: '{zinc.300}',
+          activeColor: '{zinc.400}'
         },
         highlight: {
           background: 'rgba(250, 250, 250, .16)',
