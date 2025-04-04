@@ -2,10 +2,11 @@ import { HttpClient } from "@angular/common/http";
 import { Injectable } from "@angular/core";
 import { Observable } from "rxjs";
 import { ArchPackage } from "../model/archpackage.model";
+import { environment } from "../environments/environment";
 
 @Injectable({ providedIn: 'root' })
 export class ArchPackageService {
-  private apiUrl = 'http://localhost:8080/packages/arch';
+  private apiUrl = environment.apiUrl;
 
   constructor(private http: HttpClient) { }
 
