@@ -45,6 +45,18 @@ services:
       - ${SPRING_PORT}:8080
     networks:
       - app-network
+ 
+  frontend:
+    build:
+      context: ./archnite-client
+      dockerfile: Dockerfile
+    container_name: frontend
+    ports:
+      - ${CLIENT_PORT}:80
+    depends_on:
+      - spring
+    networks:
+      - app-network
 
 volumes:
   postgres_data:
