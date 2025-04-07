@@ -47,9 +47,7 @@ services:
       - app-network
  
   frontend:
-    build:
-      context: ./archnite-client
-      dockerfile: Dockerfile
+    build: ./archnite-client
     container_name: frontend
     ports:
       - ${CLIENT_PORT}:80
