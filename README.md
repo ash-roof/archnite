@@ -1,4 +1,9 @@
-# Archnite
+<div align="center">
+  <a href="https://github.com/OmarAshraf-02/archnite">
+    <img src="images/logo.png" alt="Logo" width="300" height="80">
+  </a>
+</div>
+<br/>
 
 Archnite is public API for Arch Linux and AUR packages with an accompanying
 client for browsing packages and generating long package install commands.
