@@ -1,26 +1,26 @@
 services:
   db:
     networks:
-      - caddy-network
+      - caddy_network
 
   db-populator:
     networks:
-      - caddy-network
+      - caddy_network
 
   spring:
     labels:
       caddy: https://api.archnite.omarashraf.dev
       caddy.reverse_proxy: "{{upstreams 80}}"
     networks:
-      - caddy-network
+      - caddy_network
 
   frontend:
     labels:
       caddy: https://archnite.omarashraf.dev
       caddy.reverse_proxy: "{{upstreams 80}}"
     networks:
-      - caddy-network
+      - caddy_network
 
 networks:
-  caddy-network:
+  caddy_network:
     external: true
