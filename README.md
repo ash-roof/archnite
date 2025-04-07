@@ -160,7 +160,7 @@ your chosen method (excluding PostgreSQL if using 2 or 3):
 3. For:
     - archnite-spring: JDK 21
     - archnite-db-populator: Go 1.23
-    - archnite-client: Node.js 22
+    - archnite-client: Node.js 22 & The Angular CLI
 
 ### Running The Project
 
@@ -232,17 +232,11 @@ cd archnite-db-populator
 go mod tidy
 ```
 
-then run:
+Then run:
 
 ```bash
 go build -o bin/populator ./cmd/populator
 ./bin/populator
-```
-
-or just run [main.go](./archnite-db-populator/main.go)
-
-```bash
-go run ./cmd/populator/main.go
 ```
 
 ##### Spring Boot project (archnite-spring)
@@ -256,13 +250,13 @@ cd archnite-spring
 ./mvnw clean install
 ```
 
-then
+Then
 
 ```bash
 ./mvnw spring-boot:run
 ```
 
-or just run the JAR File:
+Or just run the JAR File:
 
 ```bash
 java -jar target/archnite-1.0.0.jar
@@ -273,6 +267,34 @@ For unit tests:
 ```bash
 ./mvnw test
 ```
+
+##### Angular project (archnite-client)
+
+Make sure you have the following installed:
+
+- Node.js (LTS 22 Recommended)
+- Angular CLI
+
+To install the Angular CLI globally:
+
+```bash
+npm install -g @angular/cli
+```
+
+Then install dependencies:
+
+```bash
+cd archnite-client
+npm install
+```
+
+Finally, run the development server with:
+
+```bash
+ng serve #you can also use npm start
+```
+
+The app will be available at `localhost:4200`
 
 ## Contributing
 
