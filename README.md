@@ -11,7 +11,7 @@ client for browsing packages and generating long package install commands.
 **Archnite is now live!** Check out the client [here](https://archnite.omarashraf.dev).
 
 The API is also hosted [here](https://api.archnite.omarashraf.dev)
-and is completely free for public use, with documentation coming soon.
+and is completely free for public use. Check out the [docs](./archnite-spring/docs/api-docs.md).
 
 ## Table of Contents
 
