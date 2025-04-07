@@ -10,14 +10,16 @@ services:
   spring:
     labels:
       caddy: https://api.archnite.omarashraf.dev
-      caddy.reverse_proxy: "{{upstreams 80}}"
+      caddy.reverse_proxy: "{{upstreams 8080}}"
     networks:
       - caddy_network
 
   frontend:
     labels:
-      caddy: https://archnite.omarashraf.dev
-      caddy.reverse_proxy: "{{upstreams 80}}"
+      caddy_0: https://archnite.omarashraf.dev
+      caddy_0.reverse_proxy: "{{upstreams 80}}"
+      caddy_1: https://www.archnite.omarashraf.dev
+      caddy_1.redir: https://archnite.omarashraf.dev
     networks:
       - caddy_network
 
