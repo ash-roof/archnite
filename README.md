@@ -32,24 +32,26 @@ and is completely free for public use, with documentation coming soon.
 
 ### Motivation & Inspiration
 
-I made archnite due to a couple of reasons. Mainly, it was to
+I made Archnite due to a couple of reasons. Mainly, it was to
 solve a small issue I had when setting up a new Arch Linux system;
-I always found it tedious to look up package names and typing out install commands.
+I always found it tedious to look up package names and type out install commands.
 
-I wanted to make a tool similar to [Ninite](https://ninite.com/)
-(where I got the inspiration for the name, yes boring I know) where I could use
-a autocomplete/incremental search box similar to what a search engine has,
-and/or pick from a list of popular packages, select my
-desired packages and get an install command I could paste into my terminal.
+I wanted to make a tool where I could use
+a autocomplete/incremental search box similar to what a
+search engine has, select my desired packages and get an
+install command I could paste into my terminal.
 
 I also wanted to make a unified API for Arch official and AUR packages that is
 relatively fast (or at least faster than the Arch official packages JSON API,
-which I found pretty slow in my experience) that anyone can use and hopefully
-find a purpose for.
+which I found pretty slow in my experience) that anyone can use.
+
+Side note: I got the inspiration for the name from [Ninite](https://ninite.com),
+because I thought this tool would be similar to it at first,
+before deciding to switch it to a search tool.
 
 ### Architecture & Tech Stack
 
-archnite was built using the following technologies:
+Archnite was built using the following technologies:
 
 - Spring Boot
   - Used to create the JSON API responsible for querying the
@@ -86,8 +88,8 @@ cd archnite
 **There are three ways you can run this project:**
 
 1. The easiest way is to run the entire service stack with Docker Compose using
-   the provided [docker-compose.yml](./docker-compose.yml) file. This will spin up an
-   instance of PostgreSQL, setup the app's database used by the Spring Boot
+   the provided [docker-compose.yml](./docker-compose.yml) file. This will spin
+   up an instance of PostgreSQL, setup the app's database used by the Spring Boot
    and Go projects and start containers running the Go, Spring Boot & Angular projects.
 
 2. Run the individual project containers using Docker and each project's Dockerfile.
@@ -296,7 +298,7 @@ npm install
 Finally, run the development server with:
 
 ```bash
-ng serve #you can also use npm start
+ng serve # you can also use npm start
 ```
 
 The app will be available at `localhost:4200`
