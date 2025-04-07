@@ -1,4 +1,4 @@
 export const environment = {
   production: true,
-  apiUrl: 'http://localhost:8080/packages/arch'
+  apiUrl: 'https://api.archnite.omarashraf.dev/packages/arch'
 };
