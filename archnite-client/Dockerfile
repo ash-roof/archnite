@@ -8,6 +8,6 @@ RUN npm ci
 COPY . ./
 RUN ng build --configuration=production
 
-FROM nginx:stable AS final
+FROM nginx:alpine AS final
 EXPOSE 80
 COPY --from=build src/dist/archnite-client/browser  /usr/share/nginx/html
