@@ -33,7 +33,7 @@ for more details.
 
 ### Motivation & Inspiration
 
-I made Archnite due to a couple of reasons. Mainly, it was to
+I made Archnite for a few reasons. Mainly, it was to
 solve a small issue I had when setting up a new Arch Linux system;
 I always found it tedious to look up package names and type out install commands.
 
