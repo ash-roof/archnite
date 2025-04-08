@@ -46,8 +46,8 @@ However, the idea then grew as I also wanted to make a unified
 API for Arch official and AUR packages that is
 relatively fast (or at least faster than the Arch official packages JSON API,
 which I found pretty slow in my experience). At first it was just for the client,
-then I thought of the idea of just hosting it as a standalone API as well for public
-use.
+then I thought of the idea of just hosting it as a standalone API
+for public use as well.
 
 Side note: I got the inspiration for the name from [Ninite](https://ninite.com),
 because I thought this tool would be similar to it at first,
