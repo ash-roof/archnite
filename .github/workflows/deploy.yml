@@ -1,0 +1,52 @@
+name: Deploy to VPS
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - 'archnite-client/**'
+      - 'archnite-spring/src/**'
+      - 'archnite-spring/.dockerignore'
+      - 'archnite-spring/Dockerfile'
+      - 'archnite-spring/pom.xml'
+      - 'archnite-db-populator/**'
+      - 'docker-compose.yml'
+      - 'docker-compose.prod.yml'
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Setup SSH key
+        run: |
+          mkdir -p ~/.ssh
+          echo "${{ secrets.SSH_PRIVATE_KEY }}" > ~/.ssh/id_ed25519
+          chmod 600 ~/.ssh/id_ed25519
+
+      - name: Add VPS to known hosts
+        run: ssh-keyscan -H ${{ secrets.SSH_HOST }} >> ~/.ssh/known_hosts
+
+      - name: SSH into VPS and deploy
+        run: |
+          ssh -i ~/.ssh/id_ed25519 ${{ secrets.SSH_USERNAME }}@${{ secrets.SSH_HOST }} << 'EOF'
+            set -e
+
+            cd /home/ash/docker/archnite
+
+            echo "Fetching latest code..."
+            git fetch origin
+            git reset --hard origin/main
+
+            echo "Ensuring .env exists..."
+            [ -f .env ] || cp .env.example .env
+
+            echo "Building and starting containers..."
+            docker compose -f docker-compose.yml -f docker-compose.prod.yml up -d --build
+
+            echo "Deployment complete"
+          EOF
