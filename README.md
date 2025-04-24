@@ -25,7 +25,7 @@ for more details.
     - [Prerequisites](#prerequisites)
     - [Running The Project](#running-the-project)
         - [Docker Compose](#1-docker-compose)
-        - [Docker](#2-docker)
+        - [Individual Docker Containers](#2-docker)
         - [Manual Setup](#3-manual-setup)
 3. [Contributing](#contributing)
 
@@ -198,7 +198,7 @@ Stop and remove the containers using:
 docker compose down
 ```
 
-#### 2. Docker
+#### 2. Individual Docker Containers
 
 Once you have your `.env` file setup correctly and your PostgreSQL instance running:
 
