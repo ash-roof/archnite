@@ -25,7 +25,7 @@ for more details.
     - [Prerequisites](#prerequisites)
     - [Running The Project](#running-the-project)
         - [Docker Compose](#1-docker-compose)
-        - [Individual Docker Containers](#2-docker)
+        - [Individual Docker Containers](#2-individual-docker-containers)
         - [Manual Setup](#3-manual-setup)
 3. [Contributing](#contributing)
 
