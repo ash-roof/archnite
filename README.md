@@ -313,3 +313,24 @@ This is my first open-source project, so I'll try to keep things simple
 and flexible for the time being. Feel free to open issues & discussions,
 suggest improvements, features or bug fixes. Any contribution
 is welcome and I'd love to learn new things about any part of this stack.
+
+To contribute:
+
+1. Fork the repository
+2. Clone your fork:
+```bash
+git clone https://github.com/<your-username>/archnite.git
+cd archnite
+```
+3. Set the upstream remote:
+```bash
+git remote add upstream https://github.com/OmarAshraf-02/archnite.git
+git fetch upstream
+```
+4. Create a new branch for your feature, bugfix or docs change:
+```bash
+git checkout -b feature/short-description
+```
+Use `feature`, `fix` or `docs` as the branch prefix.
+
+5. Make your changes and submit a pull request!
